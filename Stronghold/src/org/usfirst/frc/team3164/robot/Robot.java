@@ -1,6 +1,8 @@
 
 package org.usfirst.frc.team3164.robot;
 
+import org.usfirst.frc.team3164.robot.motors.DriveTrain;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,21 +14,29 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
-    final String defaultAuto = "Default";
+public class Robot extends IterativeRobot {	
+    /*
+     * NOTE: TEMP
+     */
+	final String defaultAuto = "Default";
     final String customAuto = "My Auto";
     String autoSelected;
     SendableChooser chooser;
 	
+    private DriveTrain drive;
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
+    	//TEMP
         chooser = new SendableChooser();
         chooser.addDefault("Default Auto", defaultAuto);
         chooser.addObject("My Auto", customAuto);
         SmartDashboard.putData("Auto choices", chooser);
+        
+        drive = new DriveTrain();
     }
     
 	/**
@@ -63,7 +73,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        
+        drive.tankDrive(0, 0);
     }
     
     /**
