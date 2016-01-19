@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team3164.robot;
 
+import org.usfirst.frc.team3164.robot.input.Controller;
 import org.usfirst.frc.team3164.robot.motors.DriveTrain;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -24,6 +25,8 @@ public class Robot extends IterativeRobot {
     SendableChooser chooser;
 	
     private DriveTrain drive;
+    private Controller gamePad1;
+    private Controller gamePad2;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -37,6 +40,8 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putData("Auto choices", chooser);
         
         drive = new DriveTrain();
+        gamePad1 = new Controller(1);
+        gamePad2 = new Controller(2);
     }
     
 	/**
@@ -73,14 +78,14 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        drive.tankDrive(0, 0);
+        drive.tankDrive(gamePad1.sticks.LEFT_STICK_Y.getRaw(), gamePad1.sticks.LEFT_STICK_Y.getRaw());
     }
     
     /**
      * This function is called periodically during test mode
      */
     public void testPeriodic() {
-    
+    	
     }
     
 }

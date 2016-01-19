@@ -10,14 +10,18 @@ public class DriveTrain {
 	
 	private Jaguar rightFrontMotor;
 	private Jaguar rightBackMotor;
-	private Jaguar leftFontMotor;
+	private Jaguar leftFrontMotor;
 	private Jaguar leftBackMotor;
 	
 	public DriveTrain() {
 		rightBackMotor = new Jaguar(DRIVETRAIN_MOTOR_REARRIGHT);
 		rightFrontMotor = new Jaguar(DRIVETRAIN_MOTOR_FRONTRIGHT);
 		leftBackMotor = new Jaguar(DRIVETRAIN_MOTOR_REARLEFT);
-		leftFontMotor = new Jaguar(DRIVETRAIN_MOTOR_FRONTLEFT);
+		leftFrontMotor = new Jaguar(DRIVETRAIN_MOTOR_FRONTLEFT);
+		rightBackMotor.setSafetyEnabled(true);
+		rightFrontMotor.setSafetyEnabled(true);
+		leftFrontMotor.setSafetyEnabled(true);
+		leftBackMotor.setSafetyEnabled(true);
 	}
 	
 	public void setRightPower(double pwr) {
@@ -27,7 +31,7 @@ public class DriveTrain {
 	
 	public void setLeftPower(double pwr) {
 		leftBackMotor.set(pwr);
-		leftFontMotor.set(pwr);
+		leftFrontMotor.set(pwr);
 	}
 	
 	public void tankDrive(double leftJoy, double rightJoy) {
