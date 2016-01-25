@@ -38,4 +38,20 @@ public class DriveTrain {
 		setLeftPower(leftJoy);
 		setRightPower(-rightJoy);
 	}
+	
+	public void forzaDrive(double axisX, double axisY) {
+		float scaleFactor = 0.5f;
+		axisX *= 100 * scaleFactor;
+		axisY *= 100 * scaleFactor;
+		
+		double v = (100 - Math.abs(axisX)) * (axisY/100) + axisY;
+		double w = (100 - Math.abs(axisY)) * (axisX/100) + axisX;
+		
+		double r = (v+w)/200;
+		double l = (v-w)/200;
+		
+		setLeftPower(l);
+		setRightPower(r);
+		
+	}
 }

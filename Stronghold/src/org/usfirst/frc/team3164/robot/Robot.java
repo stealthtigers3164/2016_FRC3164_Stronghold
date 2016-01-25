@@ -80,13 +80,15 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         drive.tankDrive(gamePad1.sticks.LEFT_STICK_Y.getRaw(), 
         				gamePad1.sticks.RIGHT_STICK_Y.getRaw());
+        SmartDashboard.putNumber("Trigger", gamePad1.trigger.getVal());
     }
     
     /**
      * This function is called periodically during test mode
      */
     public void testPeriodic() {
-    	
+    	drive.forzaDrive(	gamePad1.sticks.LEFT_STICK_X.getRaw(),
+    						gamePad1.trigger.getVal());
     }
     
 }
