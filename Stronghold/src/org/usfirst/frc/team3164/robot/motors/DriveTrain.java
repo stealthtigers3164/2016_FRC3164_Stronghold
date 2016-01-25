@@ -36,6 +36,6 @@ public class DriveTrain {
 	
 	public void tankDrive(double leftJoy, double rightJoy) {
 		setLeftPower(leftJoy);
-		setRightPower(rightJoy);
+		setRightPower(-rightJoy);
 	}
 }

@@ -71,14 +71,15 @@ public class Robot extends IterativeRobot {
     	default:
     	//Put default auto code here
             break;
-    	}
+    	} 
     }
 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        drive.tankDrive(gamePad1.sticks.LEFT_STICK_Y.getRaw(), gamePad1.sticks.LEFT_STICK_Y.getRaw());
+        drive.tankDrive(gamePad1.sticks.LEFT_STICK_Y.getRaw(), 
+        				gamePad1.sticks.RIGHT_STICK_Y.getRaw());
     }
     
     /**
