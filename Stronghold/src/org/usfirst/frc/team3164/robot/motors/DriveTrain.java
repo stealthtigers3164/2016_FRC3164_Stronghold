@@ -64,7 +64,7 @@ public class DriveTrain {
 	}
 	
 	public void setScaleFactor(double sf) {
-		this.scaleFactor = sf;
+		this.scaleFactor = Math.min(Math.abs(sf), 1) * Math.signum(sf);
 	}
 	
 }
