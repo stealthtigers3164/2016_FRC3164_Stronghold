@@ -1,6 +1,7 @@
 package org.usfirst.frc.team3164.robot.input;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Controller {
 	public Joystick jstick;
@@ -29,7 +30,7 @@ public class Controller {
 		this.jstick = new Joystick(port);
 		this.buttons = new FTCButtons();
 		this.sticks = new FTCAxes();
-		this.trigger = new FTCTriggers(3);
+		this.trigger = new FTCTriggers(2, 3); //3
 		this.tophat = new TopHat(4, 5);
 	}
 	
@@ -61,8 +62,11 @@ public class Controller {
 	public class FTCAxes {
 		public LeftRightAxis LEFT_STICK_X = new LeftRightAxis(0);
 		public UpDownAxis LEFT_STICK_Y = new UpDownAxis(1);
-		public LeftRightAxis RIGHT_STICK_X = new LeftRightAxis(2);
-		public UpDownAxis RIGHT_STICK_Y = new UpDownAxis(3);
+		public LeftRightAxis RIGHT_STICK_X = new LeftRightAxis(4);
+		public UpDownAxis RIGHT_STICK_Y = new UpDownAxis(5);
+		public LeftRightAxis RIGHT_TRIGGER = new LeftRightAxis(3);
+		public UpDownAxis LEFT_TRIGGER = new UpDownAxis(2);
+		
 	}
 	
 	/**
@@ -71,23 +75,25 @@ public class Controller {
 	 *
 	 */
 	public class FTCTriggers {
-		private int port;
-		public FTCTriggers(int port) {
-			this.port = port;
+		private int leftPort;
+		private int rightPort;
+		public FTCTriggers(int left, int right) {
+			this.leftPort = left;
+			this.rightPort = right;
+			
 		}
 		/**
 		 * Get the value of the triggers
 		 * @return value of the triggers
 		 */
-		public double getVal() {
-			return jstick.getRawAxis(port);
+		public double getLeftVal() {
+			return jstick.getRawAxis(leftPort);
 		}
-		/**
-		 * Gets which side is pressed down harder.
-		 * @return Which direction is pressed more
-		 */
-		public LeftRightDir getMorePressed() {
-			return getVal() >= 0 ? LeftRightDir.LEFT : LeftRightDir.RIGHT;
+		public double getRightVal() {
+			return jstick.getRawAxis(rightPort);
+		}
+		public double getCombineVal() {
+			return ((jstick.getRawAxis(rightPort) - jstick.getRawAxis(leftPort)));
 		}
 	}
 	

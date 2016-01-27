@@ -3,10 +3,10 @@ package org.usfirst.frc.team3164.robot.motors;
 import edu.wpi.first.wpilibj.Jaguar;
 
 public class DriveTrain {
-	private static int DRIVETRAIN_MOTOR_FRONTLEFT = 0;
-	private static int DRIVETRAIN_MOTOR_FRONTRIGHT = 1;
-	private static int DRIVETRAIN_MOTOR_REARLEFT = 2;
-	private final static int DRIVETRAIN_MOTOR_REARRIGHT = 3;
+	private static int DRIVETRAIN_MOTOR_FRONTLEFT = 1;//0
+	private static int DRIVETRAIN_MOTOR_FRONTRIGHT = 0; //1
+	private static int DRIVETRAIN_MOTOR_REARLEFT = 3; //2
+	private static int DRIVETRAIN_MOTOR_REARRIGHT = 2; //3
 	
 	private Jaguar rightFrontMotor;
 	private Jaguar rightBackMotor;
@@ -18,10 +18,14 @@ public class DriveTrain {
 		rightFrontMotor = new Jaguar(DRIVETRAIN_MOTOR_FRONTRIGHT);
 		leftBackMotor = new Jaguar(DRIVETRAIN_MOTOR_REARLEFT);
 		leftFrontMotor = new Jaguar(DRIVETRAIN_MOTOR_FRONTLEFT);
+		
 		rightBackMotor.setSafetyEnabled(true);
 		rightFrontMotor.setSafetyEnabled(true);
 		leftFrontMotor.setSafetyEnabled(true);
 		leftBackMotor.setSafetyEnabled(true);
+		
+		leftBackMotor.setInverted(true);
+		leftFrontMotor.setInverted(true);
 	}
 	
 	public void setRightPower(double pwr) {
@@ -36,13 +40,13 @@ public class DriveTrain {
 	
 	public void tankDrive(double leftJoy, double rightJoy) {
 		setLeftPower(leftJoy);
-		setRightPower(-rightJoy);
+		setRightPower(rightJoy);
 	}
 	
 	public void forzaDrive(double axisX, double axisY) {
 		float scaleFactor = 0.5f;
 		axisX *= 100 * scaleFactor;
-		axisY *= 100 * scaleFactor;
+		axisY *= -100 * scaleFactor;
 		
 		double v = (100 - Math.abs(axisX)) * (axisY/100) + axisY;
 		double w = (100 - Math.abs(axisY)) * (axisX/100) + axisX;
