@@ -49,11 +49,15 @@ public class Robot extends IterativeRobot {
         chooserDT.addDefault("Tank Drive", driveTank);
         chooserDT.addObject("Forza Drive", driveForza);
         SmartDashboard.putData("Drivetrain", chooserDT);
+
         
         drive = new DriveTrain();
         gamePad1 = new Controller(0);
         gamePad2 = new Controller(1);
-
+        
+        drive.setScaleFactor(0.7);
+        SmartDashboard.putNumber("Driving Scale Factor", 0.7);
+        
     }
     
 	/**
@@ -91,25 +95,21 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
     	driveSelected = (String) chooserDT.getSelected();
+    	drive.setScaleFactor(SmartDashboard.getNumber("Driving Scale Factor"));
+    	
     	switch(driveSelected) {
 	    	case driveForza:
-	        	drive.forzaDrive(	gamePad1.sticks.LEFT_STICK_X.getRaw(),
-									gamePad1.trigger.getCombineVal());
+	        	drive.forzaDrive(	gamePad1.sticks.LEFT_STICK_X.getScaled(),
+									gamePad1.trigger.getCombineValScaled());
 	
-	        	
 	        	break;
 	    	case driveTank:
 	    	default:
-	        	drive.tankDrive(gamePad1.sticks.LEFT_STICK_Y.getRaw(), 
-	    						gamePad1.sticks.RIGHT_STICK_Y.getRaw());
+	        	drive.tankDrive(gamePad1.sticks.LEFT_STICK_Y.getScaled(), 
+	    						gamePad1.sticks.RIGHT_STICK_Y.getScaled());
 	            break;
     	}
-    	SmartDashboard.putNumber("Trigger", gamePad1.sticks.RIGHT_TRIGGER.getRaw());
-    	
-    	SmartDashboard.putNumber("LX", gamePad1.sticks.LEFT_STICK_X.getRaw());
-    	SmartDashboard.putNumber("LY", gamePad1.sticks.LEFT_STICK_Y.getRaw());
-    	SmartDashboard.putNumber("RX", gamePad1.sticks.RIGHT_STICK_X.getRaw());
-    	SmartDashboard.putNumber("RY", gamePad1.sticks.RIGHT_STICK_Y.getRaw());
+
     }
     
     /**

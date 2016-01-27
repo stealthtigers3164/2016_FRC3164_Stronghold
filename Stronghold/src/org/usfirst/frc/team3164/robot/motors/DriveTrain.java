@@ -13,6 +13,8 @@ public class DriveTrain {
 	private Jaguar leftFrontMotor;
 	private Jaguar leftBackMotor;
 	
+	private double scaleFactor = 1;
+	
 	public DriveTrain() {
 		rightBackMotor = new Jaguar(DRIVETRAIN_MOTOR_REARRIGHT);
 		rightFrontMotor = new Jaguar(DRIVETRAIN_MOTOR_FRONTRIGHT);
@@ -39,14 +41,13 @@ public class DriveTrain {
 	}
 	
 	public void tankDrive(double leftJoy, double rightJoy) {
-		setLeftPower(leftJoy);
-		setRightPower(rightJoy);
+		setLeftPower(scaleJoysticks(leftJoy));
+		setRightPower(scaleJoysticks(rightJoy));
 	}
 	
 	public void forzaDrive(double axisX, double axisY) {
-		float scaleFactor = 0.5f;
-		axisX *= 100 * scaleFactor;
-		axisY *= -100 * scaleFactor;
+		axisX = 100 * scaleJoysticks(axisX);
+		axisY = -100 * scaleJoysticks(axisY);
 		
 		double v = (100 - Math.abs(axisX)) * (axisY/100) + axisY;
 		double w = (100 - Math.abs(axisY)) * (axisX/100) + axisX;
@@ -58,4 +59,12 @@ public class DriveTrain {
 		setRightPower(r);
 		
 	}
+	private double scaleJoysticks(double number) {
+		return number * scaleFactor;
+	}
+	
+	public void setScaleFactor(double sf) {
+		this.scaleFactor = sf;
+	}
+	
 }

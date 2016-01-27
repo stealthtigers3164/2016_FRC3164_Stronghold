@@ -95,6 +95,11 @@ public class Controller {
 		public double getCombineVal() {
 			return ((jstick.getRawAxis(rightPort) - jstick.getRawAxis(leftPort)));
 		}
+		public double getCombineValScaled() {
+			double val = (jstick.getRawAxis(rightPort) - jstick.getRawAxis(leftPort));
+			if(Math.abs(val)<=0.1) return 0;
+			return (Math.abs(val) - 0.1)/0.9 * Math.signum(val);
+		}
 	}
 	
 	/**
@@ -297,7 +302,14 @@ public class Controller {
 		 * @return raw value of stick, [-1, 1]
 		 */
 		public double getRaw() {
-			return Math.abs(jstick.getRawAxis(port))>=0.1 ? jstick.getRawAxis(port) : 0;
+			return jstick.getRawAxis(port);
+			//return Math.abs(jstick.getRawAxis(port))>=0.1 ? jstick.getRawAxis(port) : 0;
+		}
+		
+		public double getScaled() {
+			if(Math.abs(jstick.getRawAxis(port))<=0.1) return 0;
+			return (Math.abs(jstick.getRawAxis(port)) - 0.1)/0.9 * Math.signum(jstick.getRawAxis(port));
+			
 		}
 	}
 }
