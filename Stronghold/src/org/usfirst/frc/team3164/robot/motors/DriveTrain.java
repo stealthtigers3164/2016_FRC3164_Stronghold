@@ -26,8 +26,8 @@ public class DriveTrain {
 		leftFrontMotor.setSafetyEnabled(true);
 		leftBackMotor.setSafetyEnabled(true);
 		
-		leftBackMotor.setInverted(true);
-		leftFrontMotor.setInverted(true);
+		rightBackMotor.setInverted(true);//left
+		rightFrontMotor.setInverted(true);//left
 	}
 	
 	public void setRightPower(double pwr) {
@@ -47,7 +47,7 @@ public class DriveTrain {
 	
 	public void forzaDrive(double axisX, double axisY) {
 		axisX = 100 * scaleJoysticks(axisX);
-		axisY = -100 * scaleJoysticks(axisY);
+		axisY = 100 * scaleJoysticks(axisY);//-
 		
 		double v = (100 - Math.abs(axisX)) * (axisY/100) + axisY;
 		double w = (100 - Math.abs(axisY)) * (axisX/100) + axisX;

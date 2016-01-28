@@ -30,7 +30,7 @@ public class Controller {
 		this.jstick = new Joystick(port);
 		this.buttons = new FTCButtons();
 		this.sticks = new FTCAxes();
-		this.trigger = new FTCTriggers(2, 3); //3
+		this.trigger = new FTCTriggers(2, 3);
 		this.tophat = new TopHat(4, 5);
 	}
 	
@@ -56,22 +56,45 @@ public class Controller {
 	
 	/**
 	 * Sticks on the FTC Controller
-	 * @author jaxon
+	 * Mapped for Logitech 430
+	 * @author jaxon, William Y
 	 *
 	 */
 	public class FTCAxes {
-		public LeftRightAxis LEFT_STICK_X = new LeftRightAxis(0);
-		public UpDownAxis LEFT_STICK_Y = new UpDownAxis(1);
-		public LeftRightAxis RIGHT_STICK_X = new LeftRightAxis(4);
-		public UpDownAxis RIGHT_STICK_Y = new UpDownAxis(5);
-		public LeftRightAxis RIGHT_TRIGGER = new LeftRightAxis(3);
-		public UpDownAxis LEFT_TRIGGER = new UpDownAxis(2);
+		public LeftRightAxis LEFT_X = new LeftRightAxis(0);
+		public UpDownAxis LEFT_Y = new UpDownAxis(1, true);
+		public LeftRightAxis RIGHT_X = new LeftRightAxis(4);
+		public UpDownAxis RIGHT_Y = new UpDownAxis(5, true);
+		
+		/**
+		 * Sets the deadzone to the greatest (X or Y) value for each axis of each stick
+		 * Caps at 0.15 in case this is called when joysticks are being used
+		 * Since it reads the raw input, only call this from robot initialization, and make sure the joysticks are not being used
+		 */
+		public void setDeadzones() {
+			this.LEFT_X.setDeadzone();
+			this.LEFT_Y.setDeadzone();
+			this.RIGHT_X.setDeadzone();
+			this.RIGHT_Y.setDeadzone();
+		}
+		
+		/**
+		 * Sets the deadzone of each axis of each joystick on the gamepad to the specified value
+		 * Caps at 0.15 for safety, buy new gamepad if it needs to be higher 
+		 * @param dz Deadzone value [0, 0.15]
+		 */
+		public void setDeadzones(double dz) {
+			this.LEFT_X.setDeadzone(dz);
+			this.LEFT_Y.setDeadzone(dz);
+			this.RIGHT_X.setDeadzone(dz);
+			this.RIGHT_Y.setDeadzone(dz);
+		}
 		
 	}
 	
 	/**
 	 * Triggers on the FTC Controller
-	 * @author jaxon
+	 * @author jaxon, William Y
 	 *
 	 */
 	public class FTCTriggers {
@@ -82,28 +105,68 @@ public class Controller {
 			this.rightPort = right;
 			
 		}
+		
 		/**
-		 * Get the value of the triggers
-		 * @return value of the triggers
+		 * Get the left trigger's value
+		 * @return value of left trigger [0,1]
 		 */
 		public double getLeftVal() {
 			return jstick.getRawAxis(leftPort);
 		}
+		
+		/**
+		 * Get the right trigger's value
+		 * @return value of the right trigger [0,1]
+		 */
 		public double getRightVal() {
 			return jstick.getRawAxis(rightPort);
 		}
-		public double getCombineVal() {
+		
+		/**
+		 * Get the triggers acting as an axis
+		 * Left trigger is negative, right trigger is positive
+		 * Values cancel each other out, returns net value
+		 * Ex. Both pressed down = 1 - 1 = 0
+		 * @return value of the trigger [-1, 1]
+		 */
+		public double getAxis() {
 			return ((jstick.getRawAxis(rightPort) - jstick.getRawAxis(leftPort)));
 		}
-		public double getCombineValScaled() {
-			double val = (jstick.getRawAxis(rightPort) - jstick.getRawAxis(leftPort));
-			if(Math.abs(val)<=0.1) return 0;
-			return (Math.abs(val) - 0.1)/0.9 * Math.signum(val);
+		
+		/**
+		 * get the net direction of the axis
+		 * defaults right if zero
+		 * @return enum dir of axis
+		 */
+		public LeftRightDir getDirection() {
+			return (this.getAxis() >=0 ? LeftRightDir.RIGHT : LeftRightDir.LEFT);
+		}
+		
+		/**
+		 * Treats left trigger as a button
+		 * Full press requires the trigger to be => 0.9
+		 * Not full press activates => 0.2
+		 * @param full true if trigger needs to be pressed completely
+		 * @return true is trigger exceeds a certain value
+		 */
+		public boolean getLeftPressed(boolean full) {
+			return (this.getLeftVal() >= (full ? 0.9 : 0.2) ? true : false);
+		}
+		
+		/**
+		 * Treats right trigger as a button
+		 * Full press requires the trigger to be => 0.9
+		 * Not full press activates => 0.2
+		 * @param full true if trigger needs to be pressed completely
+		 * @return true is trigger exceeds a certain value
+		 */
+		public boolean getRightPressed(boolean full) {
+			return (this.getRightVal() >= (full ? 0.9 : 0.2) ? true : false);
 		}
 	}
 	
 	/**
-	 * Class to read an axis accuating left and right
+	 * Class to read an axis actuating left and right
 	 * @author jaxon
 	 *
 	 */
@@ -115,19 +178,32 @@ public class Controller {
 		public LeftRightAxis(int port) {
 			super(port);
 		}
+		
+		/**
+		 * Set up an axis that can be read
+		 * @param port port of axis
+		 * @param rev set true to flip values (mainly for Y axis)
+		 */
+		public LeftRightAxis(int port, boolean rev) {
+			super(port, rev);
+		}
+		
 		/**
 		 * get direction of axis
+		 * defaults right if zero
 		 * @return enum dir of axis
 		 */
 		public LeftRightDir getDirection() {
-			return getRaw() >=0 ? LeftRightDir.RIGHT : LeftRightDir.LEFT;
+			return (this.getRaw() >=0 ? LeftRightDir.RIGHT : LeftRightDir.LEFT);
 		}
+		
 		/**
-		 * returns the intenity (absolute val) of the 
+		 * Gives the intensity of the axis (not scaled)
+		 * Just the absolute value of getRaw()
 		 * @return [0, 1]
 		 */
 		public double getIntensity() {
-			return Math.abs(getRaw());
+			return Math.abs(this.getRaw());
 		}
 	}
 	/**
@@ -151,19 +227,34 @@ public class Controller {
 		public UpDownAxis(int port) {
 			super(port);
 		}
+		
+		/**
+		 * Creates new axis reader
+		 * @param port port of the axis
+		 * @param rev set true to flip the values (for Y axis)
+		 */
+		public UpDownAxis(int port, boolean rev) {
+			super(port, rev);
+		}
+		
 		/**
 		 * Gets the direction, up or down
+		 * Defaults up
 		 * @return enum value, up or down
 		 */
 		public UpDownDir getDirection() {
-			return getRaw() >=0 ? UpDownDir.DOWN : UpDownDir.UP;
+			return (this.getRaw() >=0 ? UpDownDir.UP : UpDownDir.DOWN);
 		}
+		
+		
+		
 		/**
-		 * gets the intensity of the axis
+		 * Gives the intensity of the axis (not scaled)
+		 * Just the absolute value of getRaw()
 		 * @return [0, 1]
 		 */
 		public double getIntensity() {
-			return Math.abs(getRaw());
+			return Math.abs(this.getRaw());
 		}
 	}
 	/**
@@ -285,31 +376,77 @@ public class Controller {
 	
 	/**
 	 * Joystick wrapper
-	 * @author jaxon
+	 * @author jaxon, William Y
 	 *
 	 */
 	public class JoystickAxis {
 		private int port;
+		private double deadzone;
+		private boolean reversed;
 		/**
 		 * Set up a joystick axis
 		 * @param port the port
+		 * @param dz deadzone default 0.1
 		 */
 		public JoystickAxis(int port) {
 			this.port = port;
+			this.deadzone = 0.1;
+			this.reversed = false;
+		}
+		
+		/**
+		 * Set up a joystick axis
+		 * @param port the port
+		 * @param rev Reverse the joystick (for Y axis)
+		 */
+		public JoystickAxis(int port, boolean rev) {
+			this.port = port;
+			this.deadzone = 0.1;
+			this.reversed = rev;
+			
 		}
 		/**
-		 * Get raw value of jstick
+		 * Get raw value of joystick (not changed)
 		 * @return raw value of stick, [-1, 1]
 		 */
 		public double getRaw() {
-			return jstick.getRawAxis(port);
-			//return Math.abs(jstick.getRawAxis(port))>=0.1 ? jstick.getRawAxis(port) : 0;
+			return jstick.getRawAxis(port) * (this.reversed ? -1 : 1);
 		}
 		
+		/**
+		 * Get the joystick's value scaled
+		 * @return an axis value, [-1, 1]
+		 */
 		public double getScaled() {
-			if(Math.abs(jstick.getRawAxis(port))<=0.1) return 0;
-			return (Math.abs(jstick.getRawAxis(port)) - 0.1)/0.9 * Math.signum(jstick.getRawAxis(port));
+			if(Math.abs(this.getRaw()) <= this.deadzone) return 0;
+			return (Math.abs(this.getRaw()) - this.deadzone)/(1 - this.deadzone) * Math.signum(this.getRaw());
 			
+		}
+		
+		/**
+		 * Sets the deadzone to the greatest (X or Y) value
+		 * Caps at 0.15 in case this is called when joysticks are being used
+		 * Since it reads the raw input, only call this from robot initialization, and make sure the joysticks are not being used
+		 */
+		public void setDeadzone() {
+			this.deadzone = Math.min(Math.abs(this.getRaw()) + 0.01, 0.15);
+		}
+		
+		/**
+		 * Sets the deadzone to sent value
+		 * Caps at 0.15, should not need to be more
+		 * @param dz Deadzone value [0, 0.15]
+		 */
+		public void setDeadzone(double dz) {
+			this.deadzone = Math.min(Math.abs(dz), 0.15);
+		}
+		
+		/**
+		 * Returns whether the axis is reversed or not
+		 * @return true if reversed
+		 */
+		public boolean isReversed() {
+			return this.reversed;
 		}
 	}
 }

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -44,19 +45,27 @@ public class Robot extends IterativeRobot {
         chooser.addDefault("Default Auto", defaultAuto);
         chooser.addObject("My Auto", customAuto);
         SmartDashboard.putData("Auto choices", chooser);
+        //END Temp
         
+        drive = new DriveTrain();
+        drive.setScaleFactor(0.7);
+        gamePad1 = new Controller(0);
+        gamePad2 = new Controller(1);
+        
+        //Needs to be tested! Automatic deadzone setting
+        gamePad1.sticks.setDeadzones();
+        gamePad2.sticks.setDeadzones();
+
+        //Testing
         chooserDT = new SendableChooser();
         chooserDT.addDefault("Tank Drive", driveTank);
         chooserDT.addObject("Forza Drive", driveForza);
         SmartDashboard.putData("Drivetrain", chooserDT);
 
-        
-        drive = new DriveTrain();
-        gamePad1 = new Controller(0);
-        gamePad2 = new Controller(1);
-        
-        drive.setScaleFactor(0.7);
         SmartDashboard.putNumber("Driving Scale Factor", 0.7);
+                
+        
+        
         
     }
     
@@ -99,14 +108,11 @@ public class Robot extends IterativeRobot {
     	
     	switch(driveSelected) {
 	    	case driveForza:
-	        	drive.forzaDrive(	gamePad1.sticks.LEFT_STICK_X.getScaled(),
-									gamePad1.trigger.getCombineValScaled());
-	
+	        	drive.forzaDrive(gamePad1.sticks.LEFT_X.getScaled(), gamePad1.trigger.getAxis());
 	        	break;
 	    	case driveTank:
 	    	default:
-	        	drive.tankDrive(gamePad1.sticks.LEFT_STICK_Y.getScaled(), 
-	    						gamePad1.sticks.RIGHT_STICK_Y.getScaled());
+	        	drive.tankDrive(gamePad1.sticks.LEFT_Y.getScaled(), gamePad1.sticks.RIGHT_Y.getScaled());
 	            break;
     	}
 
