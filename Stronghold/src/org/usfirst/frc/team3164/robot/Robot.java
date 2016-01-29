@@ -27,6 +27,7 @@ public class Robot extends IterativeRobot {
 
     final String driveTank = "Tank Drive";
     final String driveForza = "Forza Drive";
+    final String driveNone = "No Drive";
     String driveSelected;
     SendableChooser chooserDT;
 
@@ -60,9 +61,11 @@ public class Robot extends IterativeRobot {
         chooserDT = new SendableChooser();
         chooserDT.addDefault("Tank Drive", driveTank);
         chooserDT.addObject("Forza Drive", driveForza);
+        chooserDT.addObject("No Drive", driveNone);
         SmartDashboard.putData("Drivetrain", chooserDT);
 
         SmartDashboard.putNumber("Driving Scale Factor", 0.7);
+        SmartDashboard.putNumber("Turning Scale Factor", 0.5);
                 
         
         
@@ -99,14 +102,24 @@ public class Robot extends IterativeRobot {
     	} 
     }
 
+    public void teleopInit() {
+    	SmartDashboard.putString("Mode", "Teleop");
+    }
+    
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
     	driveSelected = (String) chooserDT.getSelected();
     	drive.setScaleFactor(SmartDashboard.getNumber("Driving Scale Factor"));
+    	drive.setScaleFactor(SmartDashboard.getNumber("Turning Scale Factor"), true);
+    	
+    	
     	
     	switch(driveSelected) {
+    		case driveNone:
+    			drive.tankDrive(0,0);
+    			break;
 	    	case driveForza:
 	        	drive.forzaDrive(gamePad1.sticks.LEFT_X.getScaled(), gamePad1.trigger.getAxis());
 	        	break;
@@ -121,7 +134,12 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during test mode
      */
-    public void testPeriodic() {
+    public void practiceInit() {
+    	SmartDashboard.putString("Mode", "Test");
+    	
+    }
+    
+    public void practicePeriodic() {
     	
     }
     
