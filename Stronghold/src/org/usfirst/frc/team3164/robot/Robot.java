@@ -4,7 +4,9 @@ package org.usfirst.frc.team3164.robot;
 import org.usfirst.frc.team3164.robot.input.Controller;
 import org.usfirst.frc.team3164.robot.motors.DriveTrain;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -101,9 +103,11 @@ public class Robot extends IterativeRobot {
             break;
     	} 
     }
-
+    AnalogInput ultra;
     public void teleopInit() {
     	SmartDashboard.putString("Mode", "Teleop");
+    	ultra = new AnalogInput(3);
+    	
     }
     
     /**
@@ -114,7 +118,7 @@ public class Robot extends IterativeRobot {
     	drive.setScaleFactor(SmartDashboard.getNumber("Driving Scale Factor"));
     	drive.setScaleFactor(SmartDashboard.getNumber("Turning Scale Factor"), true);
     	
-    	
+    	SmartDashboard.putNumber("analog", ultra.getVoltage());
     	
     	switch(driveSelected) {
     		case driveNone:
