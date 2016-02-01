@@ -3,10 +3,11 @@ package org.usfirst.frc.team3164.robot;
 
 import org.usfirst.frc.team3164.robot.input.Controller;
 import org.usfirst.frc.team3164.robot.motors.DriveTrain;
+import org.usfirst.frc.team3164.robot.vission.Camera;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,7 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {	
-    /*
+    public static Robot instance;
+	/*
      * NOTE: TEMP
      */
 	final String defaultAuto = "Default";
@@ -37,6 +39,8 @@ public class Robot extends IterativeRobot {
     private DriveTrain drive;
     private Controller gamePad1;
     private Controller gamePad2;
+
+    private Camera microsoftCamera;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -69,9 +73,11 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Driving Scale Factor", 0.7);
         SmartDashboard.putNumber("Turning Scale Factor", 0.5);
                 
-        
-        
-        
+        CameraServer.getInstance().setQuality(50);
+        CameraServer.getInstance().startAutomaticCapture("cam0");
+        //TestCamera = new CameraServer();
+        //microsoftCamera = new Camera();
+        instance = this;
     }
     
 	/**
@@ -118,9 +124,8 @@ public class Robot extends IterativeRobot {
     	drive.setScaleFactor(SmartDashboard.getNumber("Driving Scale Factor"));
     	drive.setScaleFactor(SmartDashboard.getNumber("Turning Scale Factor"), true);
     	
+    	SmartDashboard.putBoolean("ImageTest", CameraServer.getInstance().isAutoCaptureStarted());
     	SmartDashboard.putNumber("analog", ultra.getVoltage());
-    	
-    	
     	
     	switch(driveSelected) {
     		case driveNone:
