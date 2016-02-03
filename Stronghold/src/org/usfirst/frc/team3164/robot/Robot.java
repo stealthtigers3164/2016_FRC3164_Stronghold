@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {	
-    public static Robot instance;
+    public static Robot instance;//Has this always been there????
 	/*
      * NOTE: TEMP
      */
@@ -50,6 +50,8 @@ public class Robot extends IterativeRobot {
     private gamepad gamePad1;
     private gamepad gamePad2;
 
+    private AnalogInput sensorRange;
+    
     private Camera microsoftCamera;
     
     /**
@@ -91,13 +93,16 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Driving Scale Factor", 0.7);
         SmartDashboard.putNumber("Turning Scale Factor", 0.5);
                 
+        //////////////		Sensors		//////////////
+        sensorRange = new AnalogInput(electricalConfig.analog_ultrasonic_port);
+        
         
         //DONT KEEP
         CameraServer.getInstance().setQuality(50);
-        CameraServer.getInstance().startAutomaticCapture("cam0");
+        CameraServer.getInstance().startAutomaticCapture("cam0");//Move to electical config
         //TestCamera = new CameraServer();
         //microsoftCamera = new Camera();
-        instance = this;
+        instance = this;//What does this do and why?
     }
     
 	/**
@@ -129,10 +134,9 @@ public class Robot extends IterativeRobot {
             break;
     	} 
     }
-    AnalogInput ultra;
     public void teleopInit() {
     	SmartDashboard.putString("Mode", "Teleop");
-    	ultra = new AnalogInput(electricalConfig.analog_ultrasonic_port);
+    	
     	
     }
     
@@ -146,13 +150,13 @@ public class Robot extends IterativeRobot {
     	
     	//Testing
     	SmartDashboard.putBoolean("ImageTest", CameraServer.getInstance().isAutoCaptureStarted());
-    	SmartDashboard.putNumber("analog", ultra.getVoltage());
+    	SmartDashboard.putNumber("analog", sensorRange.getAverageVoltage());
     	
     	
     	//Remove switch for comp, wastes cycles
     	switch(driveSelected) {
     		case driveNone:
-    			drive.tankDrive(0,0);
+    			drive.tankDrive(0, 0);
     			break;
 	    	case driveForza:
 	        	drive.forzaDrive(gamePad1.sticks.LEFT_X.getScaled(), gamePad1.trigger.getAxis());
