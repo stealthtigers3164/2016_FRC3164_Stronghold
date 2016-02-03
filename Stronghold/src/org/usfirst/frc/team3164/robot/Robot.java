@@ -66,6 +66,10 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putData("Auto choices", chooser);
         //END Temp
         
+        
+        watchcat.init();//Not sure if should go here
+        
+        
         //////////////		Drivetrain		//////////////
         drive = new driveTrain(
         			new jaguarMotor(electricalConfig.wheel_frontLeft_pwm, electricalConfig.wheel_frontLeft_rev),
