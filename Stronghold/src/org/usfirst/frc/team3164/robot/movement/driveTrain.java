@@ -1,50 +1,32 @@
-package org.usfirst.frc.team3164.robot.motors;
+package org.usfirst.frc.team3164.robot.movement;
 
-import edu.wpi.first.wpilibj.Jaguar;
+import org.usfirst.frc.team3164.robot.electrical.motor.basicMotor;
 
-public class DriveTrain {
-	private static int DRIVETRAIN_MOTOR_FRONTLEFT = 1;//0
-	private static int DRIVETRAIN_MOTOR_FRONTRIGHT = 0; //1
-	private static int DRIVETRAIN_MOTOR_REARLEFT = 3; //2
-	private static int DRIVETRAIN_MOTOR_REARRIGHT = 2; //3
+public class driveTrain {
 	
-	private Jaguar rightFrontMotor;
-	private Jaguar rightBackMotor;
-	private Jaguar leftFrontMotor;
-	private Jaguar leftBackMotor;
+	private basicMotor frontLeftMotor;	
+	private basicMotor frontRightMotor;
+	private basicMotor backLeftMotor;
+	private basicMotor backRightMotor;	
 	
 	private double scaleFactor = 1;
 	private double scaleFactorX = 1;
 	
-	public DriveTrain() {
-		rightBackMotor = new Jaguar(DRIVETRAIN_MOTOR_REARRIGHT);
-		rightFrontMotor = new Jaguar(DRIVETRAIN_MOTOR_FRONTRIGHT);
-		leftBackMotor = new Jaguar(DRIVETRAIN_MOTOR_REARLEFT);
-		leftFrontMotor = new Jaguar(DRIVETRAIN_MOTOR_FRONTLEFT);
-		
-		
-		rightBackMotor.setSafetyEnabled(false);
-		rightFrontMotor.setSafetyEnabled(false);
-		leftFrontMotor.setSafetyEnabled(false);
-		leftBackMotor.setSafetyEnabled(false);
-		
-		rightBackMotor.setExpiration(0.5f);
-		rightFrontMotor.setExpiration(0.5f);
-		leftBackMotor.setExpiration(0.5f);
-		leftFrontMotor.setExpiration(0.5f);
-		
-		rightBackMotor.setInverted(true);//left
-		rightFrontMotor.setInverted(true);//left
+	public driveTrain(basicMotor flMotor, basicMotor frMotor, basicMotor blMotor, basicMotor brMotor) {
+		frontLeftMotor = flMotor;
+		frontRightMotor = frMotor;
+		backLeftMotor = blMotor;
+		backRightMotor = brMotor;
 	}
 	
 	public void setRightPower(double pwr) {
-		/*if(rightBackMotor.get() != pwr)*/rightBackMotor.set(pwr);
-		/*if(rightFrontMotor.get() != pwr)*/rightFrontMotor.set(pwr);
+		backRightMotor.setPower(pwr);
+		frontRightMotor.setPower(pwr);
 	}
 	
 	public void setLeftPower(double pwr) {
-		/*if(leftBackMotor.get() != pwr)*/leftBackMotor.set(pwr);
-		/*if(leftFrontMotor.get() != pwr)*/leftFrontMotor.set(pwr);
+		backLeftMotor.setPower(pwr);
+		frontLeftMotor.setPower(pwr);
 	}
 	
 	public void tankDrive(double leftJoy, double rightJoy) {

@@ -1,9 +1,19 @@
 
 package org.usfirst.frc.team3164.robot;
 
-import org.usfirst.frc.team3164.robot.input.Controller;
-import org.usfirst.frc.team3164.robot.motors.DriveTrain;
+import org.usfirst.frc.team3164.robot.comms.watchcat;
+import org.usfirst.frc.team3164.robot.input.gamepad;
+import org.usfirst.frc.team3164.robot.movement.driveTrain;
+import org.usfirst.frc.team3164.robot.electrical.electricalConfig;
+import org.usfirst.frc.team3164.robot.electrical.motor.jaguarMotor;
 import org.usfirst.frc.team3164.robot.vission.Camera;
+/*
+ * *************
+ * Daniel: Correct vission to vision
+ * Add the new files
+ * *************
+ */
+
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -36,9 +46,9 @@ public class Robot extends IterativeRobot {
     SendableChooser chooserDT;
 
     
-    private DriveTrain drive;
-    private Controller gamePad1;
-    private Controller gamePad2;
+    private driveTrain drive;
+    private gamepad gamePad1;
+    private gamepad gamePad2;
 
     private Camera microsoftCamera;
     
@@ -54,16 +64,24 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putData("Auto choices", chooser);
         //END Temp
         
-        drive = new DriveTrain();
-        drive.setScaleFactor(0.7);
-        gamePad1 = new Controller(0);
-        gamePad2 = new Controller(1);
+        //////////////		Drivetrain		//////////////
+        drive = new driveTrain(
+        			new jaguarMotor(electricalConfig.wheel_frontLeft_pwm, electricalConfig.wheel_frontLeft_rev),
+        			new jaguarMotor(electricalConfig.wheel_frontRight_pwm, electricalConfig.wheel_frontRight_rev),
+        			new jaguarMotor(electricalConfig.wheel_backLeft_pwm, electricalConfig.wheel_backLeft_rev),
+        			new jaguarMotor(electricalConfig.wheel_backRight_pwm, electricalConfig.wheel_backRight_rev));
+        drive.setScaleFactor(0.7);//Overridden by smart dashboard
         
-        //Needs to be tested! Automatic deadzone setting
+        
+        //////////////		Gamepad		//////////////
+        gamePad1 = new gamepad(0);
+        gamePad2 = new gamepad(1);
+
+        
         gamePad1.sticks.setDeadzones();
         gamePad2.sticks.setDeadzones();
 
-        //Testing
+        //////////////		Driving		//////////////				DONT KEEP FOR COMP
         chooserDT = new SendableChooser();
         chooserDT.addDefault("Tank Drive", driveTank);
         chooserDT.addObject("Forza Drive", driveForza);
@@ -73,6 +91,8 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Driving Scale Factor", 0.7);
         SmartDashboard.putNumber("Turning Scale Factor", 0.5);
                 
+        
+        //DONT KEEP
         CameraServer.getInstance().setQuality(50);
         CameraServer.getInstance().startAutomaticCapture("cam0");
         //TestCamera = new CameraServer();
@@ -112,7 +132,7 @@ public class Robot extends IterativeRobot {
     AnalogInput ultra;
     public void teleopInit() {
     	SmartDashboard.putString("Mode", "Teleop");
-    	ultra = new AnalogInput(3);
+    	ultra = new AnalogInput(electricalConfig.analog_ultrasonic_port);
     	
     }
     
@@ -124,9 +144,12 @@ public class Robot extends IterativeRobot {
     	drive.setScaleFactor(SmartDashboard.getNumber("Driving Scale Factor"));
     	drive.setScaleFactor(SmartDashboard.getNumber("Turning Scale Factor"), true);
     	
+    	//Testing
     	SmartDashboard.putBoolean("ImageTest", CameraServer.getInstance().isAutoCaptureStarted());
     	SmartDashboard.putNumber("analog", ultra.getVoltage());
     	
+    	
+    	//Remove switch for comp, wastes cycles
     	switch(driveSelected) {
     		case driveNone:
     			drive.tankDrive(0,0);
@@ -139,18 +162,19 @@ public class Robot extends IterativeRobot {
 	        	drive.tankDrive(gamePad1.sticks.LEFT_Y.getScaled(), gamePad1.sticks.RIGHT_Y.getScaled());
 	            break;
     	}
-
+    
+    	watchcat.feed();
     }
     
     /**
      * This function is called periodically during test mode
      */
-    public void practiceInit() {
+    public void testInit() {
     	SmartDashboard.putString("Mode", "Test");
     	
     }
     
-    public void practicePeriodic() {
+    public void testPeriodic() {
     	
     }
     
