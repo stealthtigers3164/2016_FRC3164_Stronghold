@@ -2,20 +2,11 @@
 package org.usfirst.frc.team3164.robot;
 
 import org.usfirst.frc.team3164.robot.comms.watchcat;
-import org.usfirst.frc.team3164.robot.input.gamepad;
-import org.usfirst.frc.team3164.robot.movement.driveTrain;
 import org.usfirst.frc.team3164.robot.electrical.electricalConfig;
 import org.usfirst.frc.team3164.robot.electrical.motor.jaguarMotor;
-import org.usfirst.frc.team3164.robot.vission.Camera;
-/*
- * *************
- * Daniel: Correct vission to vision
- * Add the new files
- * *************
- */
+import org.usfirst.frc.team3164.robot.input.gamepad;
+import org.usfirst.frc.team3164.robot.movement.driveTrain;
 
-
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
