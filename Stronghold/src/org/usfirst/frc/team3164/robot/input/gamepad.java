@@ -8,19 +8,23 @@ public class gamepad {
 	/**
 	 * Controller button wrapper
 	 */
-	public FTCButtons buttons;
+	public gamepadButtons buttons;
 	/**
 	 * Controller stick wrapper
 	 */
-	public FTCAxes sticks;
+	public gamepadAxes sticks;
 	/**
 	 * Controller trigger wrapper
 	 */
-	public FTCTriggers trigger;
+	public gamepadTriggers trigger;
 	/**
 	 * Controller tophat wrapper
 	 */
-	public TopHat tophat;
+	public gamepadDPad tophat;
+	/**
+	 * Rumble motor wrapper
+	 */
+	public gamepadRumble rumble;
 	
 	/**
 	 * Controller constructor
@@ -28,10 +32,11 @@ public class gamepad {
 	 */
 	public gamepad(int port) {
 		this.jstick = new Joystick(port);
-		this.buttons = new FTCButtons();
-		this.sticks = new FTCAxes();
-		this.trigger = new FTCTriggers(2, 3);
-		this.tophat = new TopHat(4, 5);
+		this.buttons = new gamepadButtons();
+		this.sticks = new gamepadAxes();
+		this.trigger = new gamepadTriggers(2, 3);
+		this.tophat = new gamepadDPad(4, 5);
+		this.rumble = new gamepadRumble();
 	}
 	
 	/**
@@ -39,7 +44,7 @@ public class gamepad {
 	 * @author jaxon
 	 *
 	 */
-	public class FTCButtons {
+	public class gamepadButtons {
 		public Button BUTTON_A = new Button(2);
 		public Button BUTTON_B = new Button(3);
 		public Button BUTTON_X = new Button(1);
@@ -60,7 +65,7 @@ public class gamepad {
 	 * @author jaxon, William Y
 	 *
 	 */
-	public class FTCAxes {
+	public class gamepadAxes {
 		public LeftRightAxis LEFT_X = new LeftRightAxis(0);
 		public UpDownAxis LEFT_Y = new UpDownAxis(1, true);
 		public LeftRightAxis RIGHT_X = new LeftRightAxis(4);
@@ -97,10 +102,10 @@ public class gamepad {
 	 * @author jaxon, William Y
 	 *
 	 */
-	public class FTCTriggers {
+	public class gamepadTriggers {
 		private int leftPort;
 		private int rightPort;
-		public FTCTriggers(int left, int right) {
+		public gamepadTriggers(int left, int right) {
 			this.leftPort = left;
 			this.rightPort = right;
 			
@@ -272,7 +277,7 @@ public class gamepad {
 	 * @author jaxon
 	 *
 	 */
-	public class TopHat {
+	public class gamepadDPad {
 		private int lrPort;
 		private int udPort;
 		/**
@@ -280,7 +285,7 @@ public class gamepad {
 		 * @param lrPort port of the left/right axis
 		 * @param udPort port of the up/down axis
 		 */
-		public TopHat(int lrPort, int udPort) {
+		public gamepadDPad(int lrPort, int udPort) {
 			this.lrPort = lrPort;
 			this.udPort = udPort;
 		}
@@ -448,5 +453,43 @@ public class gamepad {
 		public boolean isReversed() {
 			return this.reversed;
 		}
+	}
+	
+	public class gamepadRumble {
+		
+		/**
+		 * To vibrate the left side of the joystick
+		 * @param power [0,1]
+		 */
+		public void rumbleLeft(float power) {
+			jstick.setRumble(Joystick.RumbleType.kLeftRumble, power);
+		}
+		
+		/**
+		 * To vibrate the right side of the joystick
+		 * @param power [0,1]
+		 */
+		public void rumbleRight(float power) {
+			jstick.setRumble(Joystick.RumbleType.kRightRumble, power);
+		}
+		
+		/**
+		 * To vibrate the both sides of the joystick
+		 * @param power [0,1]
+		 */
+		public void rumble(float power) {
+			this.rumbleLeft(power);
+			this.rumbleRight(power);
+		}
+		
+		/**
+		 * To vibrate the both sides of the joystick
+		 * @param power [0,1]
+		 */
+		public void stop() {
+			this.rumbleLeft(0);
+			this.rumbleRight(0);
+		}
+		
 	}
 }

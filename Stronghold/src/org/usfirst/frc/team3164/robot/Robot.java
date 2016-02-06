@@ -50,9 +50,9 @@ public class Robot extends IterativeRobot {
     private gamepad gamePad1;
     private gamepad gamePad2;
 
-    private AnalogInput sensorRange;
+    //private AnalogInput sensorRange;
     
-    private Camera microsoftCamera;
+    //private Camera microsoftCamera;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -98,7 +98,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Turning Scale Factor", 0.5);
                 
         //////////////		Sensors		//////////////
-        sensorRange = new AnalogInput(electricalConfig.analog_ultrasonic_port);
+        //sensorRange = new AnalogInput(electricalConfig.analog_ultrasonic_port);
         
         
         //DONT KEEP
@@ -141,7 +141,7 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
     	SmartDashboard.putString("Mode", "Teleop");
     	
-    	
+    	SmartDashboard.putNumber("buttonPort", 1);
     }
     
     /**
@@ -154,7 +154,7 @@ public class Robot extends IterativeRobot {
     	
     	//Testing
     	SmartDashboard.putBoolean("ImageTest", CameraServer.getInstance().isAutoCaptureStarted());
-    	SmartDashboard.putNumber("analog", sensorRange.getAverageVoltage());
+    	//SmartDashboard.putNumber("analog", sensorRange.getAverageVoltage());
     	
     	
     	//Remove switch for comp, wastes cycles
@@ -171,6 +171,10 @@ public class Robot extends IterativeRobot {
 	            break;
     	}
     
+    	SmartDashboard.putString("isXbox", gamePad1.jstick.getName());
+    	SmartDashboard.putBoolean("ButtonPressed", gamePad1.jstick.getRawButton((int)SmartDashboard.getNumber("buttonPort")));
+    	
+    	
     	watchcat.feed();
     }
     
