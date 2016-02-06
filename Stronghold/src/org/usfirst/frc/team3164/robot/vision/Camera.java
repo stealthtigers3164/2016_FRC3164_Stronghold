@@ -11,6 +11,20 @@ public class Camera
 	private HashMap<String, NetworkTable> networkTables;
 	private HashMap<String, MotorSet> networkTableMotors;
 	
+	public Camera() {
+		
+	}
+	
+	public void Update() {
+		if (networkTableMotors.size() > 0) {
+			for (String CurrentKey : networkTableMotors.keySet()) {
+				MotorSet Set = getMotorSetByKey(CurrentKey);
+				if (Set.shouldUpdate())
+					Set.UpdateMotors();
+			}
+		}
+	}
+	
 	public void addNetworkTable(String KEY_TO_FIND_IN_MAP, String TableKey, MotorSet motors) {
 		networkTables.put(KEY_TO_FIND_IN_MAP, NetworkTable.getTable(TableKey));
 		networkTableMotors.put(KEY_TO_FIND_IN_MAP, motors);
@@ -20,15 +34,10 @@ public class Camera
 		return networkTables.get(KEY_TO_FIND_IN_MAP);
 	}
 	
-	public <T extends MotorSet> getMotorSetByKey(String KEY_TO_FIND_IN_MAP) {
-		if (networkTableMotors.get(KEY_TO_FIND_IN_MAP) instanceof T) {
-			
-		}
-		return (T);
+	public <T extends MotorSet> T getMotorSetByKey(String KEY_TO_FIND_IN_MAP) {
+		return (T)networkTableMotors.get(KEY_TO_FIND_IN_MAP);
 	}
 }
-
-
 
 /*private class ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport> {
 		double PercentAreaToImageArea;
