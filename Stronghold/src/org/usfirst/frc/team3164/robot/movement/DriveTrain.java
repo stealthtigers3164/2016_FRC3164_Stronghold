@@ -1,18 +1,18 @@
 package org.usfirst.frc.team3164.robot.movement;
 
-import org.usfirst.frc.team3164.robot.electrical.motor.basicMotor;
+import org.usfirst.frc.team3164.robot.electrical.motor.BasicMotor;
 
-public class driveTrain {
+public class DriveTrain {
 	
-	private basicMotor frontLeftMotor;	
-	private basicMotor frontRightMotor;
-	private basicMotor backLeftMotor;
-	private basicMotor backRightMotor;	
+	private BasicMotor frontLeftMotor;	
+	private BasicMotor frontRightMotor;
+	private BasicMotor backLeftMotor;
+	private BasicMotor backRightMotor;	
 	
 	private double scaleFactor = 1;
 	private double scaleFactorX = 1;
 	
-	public driveTrain(basicMotor flMotor, basicMotor frMotor, basicMotor blMotor, basicMotor brMotor) {
+	public DriveTrain(BasicMotor flMotor, BasicMotor frMotor, BasicMotor blMotor, BasicMotor brMotor) {
 		frontLeftMotor = flMotor;
 		frontRightMotor = frMotor;
 		backLeftMotor = blMotor;

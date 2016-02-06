@@ -1,10 +1,10 @@
 package org.usfirst.frc.team3164.robot.electrical.motor;
 
-import org.usfirst.frc.team3164.robot.comms.watchcat;
+import org.usfirst.frc.team3164.robot.comms.Watchcat;
 
 import edu.wpi.first.wpilibj.Jaguar;
 
-public class jaguarMotor implements basicMotor {
+public class JaguarMotor implements BasicMotor {
     private int pwmLoc;
     private Jaguar m;
     private double power;
@@ -14,11 +14,11 @@ public class jaguarMotor implements basicMotor {
      * Make a new Motor Object
      * @param pwmLoc PWM location of the motor
      */
-    public jaguarMotor(int pwmLoc) {
+    public JaguarMotor(int pwmLoc) {
         this.pwmLoc = pwmLoc;
         this.m = new Jaguar(this.pwmLoc);
         this.power = 0;
-        watchcat.registerMotor(this);
+        Watchcat.registerMotor(this);
     }
     
     /**
@@ -26,7 +26,7 @@ public class jaguarMotor implements basicMotor {
      * @param pwmLoc PWM location of the motor
      * @param reversed true if the motor should be reversed.
      */
-    public jaguarMotor(final int pwmLoc, boolean reversed) {
+    public JaguarMotor(final int pwmLoc, boolean reversed) {
     	this(pwmLoc);
     	this.m.setInverted(reversed);
     }
@@ -35,7 +35,6 @@ public class jaguarMotor implements basicMotor {
      * Please Please Please Please don't mess with this unless you MUST! D:
      * @return The Jag cotroller
      */
-    @Deprecated
     public Jaguar getJag() {
     	return m;
     }

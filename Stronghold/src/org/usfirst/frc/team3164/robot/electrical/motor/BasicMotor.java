@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3164.robot.electrical.motor;
 
-public interface basicMotor {
+public interface BasicMotor {
 	/**
 	 * Gets the location of the motor
 	 * @return int loc of motor

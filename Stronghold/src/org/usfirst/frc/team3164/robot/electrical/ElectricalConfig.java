@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3164.robot.electrical;
 
-public class electricalConfig {
+public class ElectricalConfig {
 	public static final int wheel_frontLeft_pwm = 1;
 	public static final boolean wheel_frontLeft_rev = false;
 	

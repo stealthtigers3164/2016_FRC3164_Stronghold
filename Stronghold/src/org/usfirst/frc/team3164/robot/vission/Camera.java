@@ -1,20 +1,36 @@
 package org.usfirst.frc.team3164.robot.vission;
 
-import java.util.Comparator;
-import java.util.Vector;
+import java.util.HashMap;
 
-import org.usfirst.frc.team3164.robot.Robot;
+import org.usfirst.frc.team3164.robot.electrical.motor.MotorSet;
 
-import com.ni.vision.NIVision;
-import com.ni.vision.NIVision.IMAQdxCameraControlMode;
-import com.ni.vision.NIVision.Image;
-import com.ni.vision.NIVision.ImageType;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+public class Camera
+{
+	private HashMap<String, NetworkTable> networkTables;
+	private HashMap<String, MotorSet> networkTableMotors;
+	
+	public void addNetworkTable(String KEY_TO_FIND_IN_MAP, String TableKey, MotorSet motors) {
+		networkTables.put(KEY_TO_FIND_IN_MAP, NetworkTable.getTable(TableKey));
+		networkTableMotors.put(KEY_TO_FIND_IN_MAP, motors);
+	}
+	
+	public NetworkTable getNetworkTableByKey(String KEY_TO_FIND_IN_MAP) {
+		return networkTables.get(KEY_TO_FIND_IN_MAP);
+	}
+	
+	public <T extends MotorSet> getMotorSetByKey(String KEY_TO_FIND_IN_MAP) {
+		if (networkTableMotors.get(KEY_TO_FIND_IN_MAP) instanceof T) {
+			
+		}
+		return (T);
+	}
+}
 
-public class Camera {
-	private class ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport> {
+
+
+/*private class ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport> {
 		double PercentAreaToImageArea;
 		double Area;
 		double BoundingRectLeft;
@@ -281,11 +297,11 @@ public class Camera {
 	 * Converts a ratio with ideal value of 1 to a score. The resulting function
 	 * is piecewise linear going from (0,0) to (1,100) to (2,0) and is 0 for all
 	 * inputs outside the range 0-2
-	 */
+	 
 	private double ratioToScore(double ratio) {
 		return (Math.max(0, Math.min(100 * (1 - Math.abs(1 - ratio)), 100)));
 	}
-
+*//*
 	private double AreaScore(ParticleReport report) {
 		double boundingArea = (report.BoundingRectBottom - report.BoundingRectTop)
 				* (report.BoundingRectRight - report.BoundingRectLeft);
@@ -293,16 +309,18 @@ public class Camera {
 		// of the rect.
 		return ratioToScore((49 / 24) * report.Area / boundingArea);
 	}
-
+	*/
 	/**
 	 * Method to score if the aspect ratio of the particle appears to match the
 	 * retro-reflective target. Target is 7"x7" so aspect should be 1
 	 */
-	private double AspectScore(ParticleReport report) {
+	
+	/*private double AspectScore(ParticleReport report) {
 		return ratioToScore(((report.BoundingRectRight - report.BoundingRectLeft)
 				/ (report.BoundingRectBottom - report.BoundingRectTop)));
 	}
-
+*/
+	/*
 	/**
 	 * Computes the estimated distance to a target using the width of the
 	 * particle in the image. For more information and graphics showing the math
@@ -319,6 +337,7 @@ public class Camera {
 	 *            side of a tote
 	 * @return The estimated distance to the target in feet.
 	 */
+		/*
 	private double computeDistance(Image image, ParticleReport report) {
 		double normalizedWidth, targetWidth;
 		NIVision.GetImageSizeResult size;
@@ -328,5 +347,4 @@ public class Camera {
 		targetWidth = 7;
 
 		return targetWidth / (normalizedWidth * 12 * Math.tan(VIEW_ANGLE * Math.PI / (180 * 2)));
-	}
-}
+	}*/

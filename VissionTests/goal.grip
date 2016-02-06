@@ -96,9 +96,9 @@
     </grip:Connection>
   </connections>
   <settings>
-    <teamNumber>0</teamNumber>
-    <publishAddress>roborio-0-frc.local</publishAddress>
-    <deployAddress>roborio-0-frc.local</deployAddress>
+    <teamNumber>3164</teamNumber>
+    <publishAddress>roborio-3164-frc.local</publishAddress>
+    <deployAddress>roborio-3164-frc.local</deployAddress>
     <deployDir>/home/lvuser</deployDir>
     <deployUser>lvuser</deployUser>
     <deployJavaHome>/usr/local/frc/JRE/</deployJavaHome>

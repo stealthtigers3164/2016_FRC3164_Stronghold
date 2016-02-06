@@ -2,7 +2,7 @@ package org.usfirst.frc.team3164.robot.electrical;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 
-public class analogDistance {
+public class AnalogDistance {
 
 	private AnalogInput distSensor;
 	private double distance = 0;
@@ -10,7 +10,7 @@ public class analogDistance {
 	 * Analog distance sensor class, setup for MaxBotix HRLV 1013 Ultrasonic Sensor
 	 * @param port analog port
 	 */
-	analogDistance(int port) {
+	AnalogDistance(int port) {
 		this.distSensor = new AnalogInput(port);
 		
 	}

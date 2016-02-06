@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.usfirst.frc.team3164.robot.electrical.motor.basicMotor;;
+import org.usfirst.frc.team3164.robot.electrical.motor.BasicMotor;;
 
-public class watchcat {
+public class Watchcat {
 	private static int timeout;//In ms
 	private static Thread wdTrd;
 	private static WDTask wdTsk;
@@ -41,16 +41,16 @@ public class watchcat {
 	}
 	
 	public static class MotorRegistry {
-		private Map<UUID, basicMotor> motors = new HashMap<UUID, basicMotor>();
+		private Map<UUID, BasicMotor> motors = new HashMap<UUID, BasicMotor>();
 		
-		public void addMotor(basicMotor m) {
+		public void addMotor(BasicMotor m) {
 			if(!isHere(m)) {
 				motors.put(UUID.randomUUID(), m);
 			}
 		}
 		
-		private boolean isHere(basicMotor m) {
-			for(basicMotor mo : motors.values()) {
+		private boolean isHere(BasicMotor m) {
+			for(BasicMotor mo : motors.values()) {
 				if(m.getLoc() == mo.getLoc()) {
 					return true;
 				}
@@ -63,7 +63,7 @@ public class watchcat {
 		if(isRobotDead)
 			return;
 		isRobotDead = true;
-		for(basicMotor m : mReg.motors.values()) {
+		for(BasicMotor m : mReg.motors.values()) {
 			m.setDead(true);
 		}
 	}
@@ -72,7 +72,7 @@ public class watchcat {
 		if(!isRobotDead)
 			return;
 		isRobotDead = false;
-		for(basicMotor m : mReg.motors.values()) {
+		for(BasicMotor m : mReg.motors.values()) {
 			m.setDead(false);
 		}
 	}
@@ -82,7 +82,7 @@ public class watchcat {
 		reviveRobot();
 	}
 	
-	public static void registerMotor(basicMotor m) {
+	public static void registerMotor(BasicMotor m) {
 		mReg.addMotor(m);
 	}
 }

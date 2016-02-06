@@ -3,7 +3,7 @@ package org.usfirst.frc.team3164.robot.input;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class gamepad {
+public class Gamepad {
 	public Joystick jstick;
 	/**
 	 * Controller button wrapper
@@ -30,7 +30,7 @@ public class gamepad {
 	 * Controller constructor
 	 * @param port The port of the controller
 	 */
-	public gamepad(int port) {
+	public Gamepad(int port) {
 		this.jstick = new Joystick(port);
 		this.buttons = new gamepadButtons();
 		this.sticks = new gamepadAxes();

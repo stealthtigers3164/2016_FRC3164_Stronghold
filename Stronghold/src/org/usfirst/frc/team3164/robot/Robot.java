@@ -1,11 +1,12 @@
 
 package org.usfirst.frc.team3164.robot;
 
-import org.usfirst.frc.team3164.robot.comms.watchcat;
-import org.usfirst.frc.team3164.robot.electrical.electricalConfig;
-import org.usfirst.frc.team3164.robot.electrical.motor.jaguarMotor;
-import org.usfirst.frc.team3164.robot.input.gamepad;
-import org.usfirst.frc.team3164.robot.movement.driveTrain;
+import org.usfirst.frc.team3164.robot.comms.Watchcat;
+import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
+import org.usfirst.frc.team3164.robot.electrical.motor.JaguarMotor;
+import org.usfirst.frc.team3164.robot.input.Gamepad;
+import org.usfirst.frc.team3164.robot.movement.DriveTrain;
+import org.usfirst.frc.team3164.robot.vission.Camera;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -37,9 +38,10 @@ public class Robot extends IterativeRobot {
     SendableChooser chooserDT;
 
     
-    private driveTrain drive;
-    private gamepad gamePad1;
-    private gamepad gamePad2;
+    private DriveTrain drive;
+    private Gamepad gamePad1;
+    private Gamepad gamePad2;
+    private Camera camera;
 
     //private AnalogInput sensorRange;
     
@@ -58,21 +60,21 @@ public class Robot extends IterativeRobot {
         //END Temp
         
         
-        watchcat.init();//Not sure if should go here
+        Watchcat.init();//Not sure if should go here
         
         
         //////////////		Drivetrain		//////////////
-        drive = new driveTrain(
-        			new jaguarMotor(electricalConfig.wheel_frontLeft_pwm, electricalConfig.wheel_frontLeft_rev),
-        			new jaguarMotor(electricalConfig.wheel_frontRight_pwm, electricalConfig.wheel_frontRight_rev),
-        			new jaguarMotor(electricalConfig.wheel_backLeft_pwm, electricalConfig.wheel_backLeft_rev),
-        			new jaguarMotor(electricalConfig.wheel_backRight_pwm, electricalConfig.wheel_backRight_rev));
+        drive = new DriveTrain(
+        			new JaguarMotor(ElectricalConfig.wheel_frontLeft_pwm, ElectricalConfig.wheel_frontLeft_rev),
+        			new JaguarMotor(ElectricalConfig.wheel_frontRight_pwm, ElectricalConfig.wheel_frontRight_rev),
+        			new JaguarMotor(ElectricalConfig.wheel_backLeft_pwm, ElectricalConfig.wheel_backLeft_rev),
+        			new JaguarMotor(ElectricalConfig.wheel_backRight_pwm, ElectricalConfig.wheel_backRight_rev));
         drive.setScaleFactor(0.7);//Overridden by smart dashboard
         
         
         //////////////		Gamepad		//////////////
-        gamePad1 = new gamepad(0);
-        gamePad2 = new gamepad(1);
+        gamePad1 = new Gamepad(0);
+        gamePad2 = new Gamepad(1);
 
         
         gamePad1.sticks.setDeadzones();
@@ -95,6 +97,7 @@ public class Robot extends IterativeRobot {
         //DONT KEEP
         CameraServer.getInstance().setQuality(50);
         CameraServer.getInstance().startAutomaticCapture("cam0");//Move to electical config
+        camera = new Camera(drive);
         //TestCamera = new CameraServer();
         //microsoftCamera = new Camera();
         instance = this;//What does this do and why?
@@ -166,7 +169,7 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putBoolean("ButtonPressed", gamePad1.jstick.getRawButton((int)SmartDashboard.getNumber("buttonPort")));
     	
     	
-    	watchcat.feed();
+    	Watchcat.feed();
     }
     
     /**
@@ -178,7 +181,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void testPeriodic() {
-    	
+    	camera.Update();
     }
     
 }
