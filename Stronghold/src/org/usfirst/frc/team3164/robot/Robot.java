@@ -6,7 +6,7 @@ import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
 import org.usfirst.frc.team3164.robot.electrical.motor.JaguarMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
 import org.usfirst.frc.team3164.robot.movement.DriveTrain;
-import org.usfirst.frc.team3164.robot.vission.Camera;
+import org.usfirst.frc.team3164.robot.vision.Camera;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;

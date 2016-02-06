@@ -2,11 +2,11 @@ package org.usfirst.frc.team3164.robot.electrical.motor;
 
 import org.usfirst.frc.team3164.robot.comms.Watchcat;
 
-import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Spark;
 
-public class JaguarMotor implements BasicMotor {
+public class SparkMotor implements BasicMotor {
     private int pwmLoc;
-    private Jaguar m;
+    private Spark m;
     private double power;
     private boolean dead;
     
@@ -14,9 +14,9 @@ public class JaguarMotor implements BasicMotor {
      * Make a new Motor Object
      * @param pwmLoc PWM location of the motor
      */
-    public JaguarMotor(int pwmLoc) {
+    public SparkMotor(int pwmLoc) {
         this.pwmLoc = pwmLoc;
-        this.m = new Jaguar(this.pwmLoc);
+        this.m = new Spark(this.pwmLoc);
         this.power = 0;
         Watchcat.registerMotor(this);
     }
@@ -26,16 +26,16 @@ public class JaguarMotor implements BasicMotor {
      * @param pwmLoc PWM location of the motor
      * @param reversed true if the motor should be reversed.
      */
-    public JaguarMotor(final int pwmLoc, boolean reversed) {
+    public SparkMotor(final int pwmLoc, boolean reversed) {
     	this(pwmLoc);
     	this.m.setInverted(reversed);
     }
     
     /**
      * Please Please Please Please don't mess with this unless you MUST! D:
-     * @return The Jaguar controller
+     * @return The Spark controller
      */
-    public Jaguar getJag() {
+    public Spark getSpark() {
     	return m;
     }
     
