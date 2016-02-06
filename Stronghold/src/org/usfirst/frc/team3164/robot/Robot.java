@@ -26,19 +26,19 @@ public class Robot extends IterativeRobot {
 	/*
      * NOTE: TEMP
      */
-	final String defaultAuto = "Default";
-    final String customAuto = "My Auto";
-    String autoSelected;
-    SendableChooser chooser;
+	private final String defaultAuto = "Default";
+    private final String customAuto = "My Auto";
+    private String autoSelected;
+    private SendableChooser chooser;
 
-    final String driveTank = "Tank Drive";
-    final String driveForza = "Forza Drive";
-    final String driveNone = "No Drive";
-    String driveSelected;
-    SendableChooser chooserDT;
+    private final String driveTank = "Tank Drive";
+    private final String driveForza = "Forza Drive";
+    private final String driveNone = "No Drive";
+    private String driveSelected;
+    private SendableChooser chooserDT;
 
     
-    private DriveTrain drive;
+    private DriveTrain<JaguarMotor> drive;
     private Gamepad gamePad1;
     private Gamepad gamePad2;
     private Camera camera;
@@ -62,20 +62,18 @@ public class Robot extends IterativeRobot {
         
         Watchcat.init();//Not sure if should go here
         
-        
-        //////////////		Drivetrain		//////////////
-        drive = new DriveTrain(
-        			new JaguarMotor(ElectricalConfig.wheel_frontLeft_pwm, ElectricalConfig.wheel_frontLeft_rev),
-        			new JaguarMotor(ElectricalConfig.wheel_frontRight_pwm, ElectricalConfig.wheel_frontRight_rev),
-        			new JaguarMotor(ElectricalConfig.wheel_backLeft_pwm, ElectricalConfig.wheel_backLeft_rev),
-        			new JaguarMotor(ElectricalConfig.wheel_backRight_pwm, ElectricalConfig.wheel_backRight_rev));
-        drive.setScaleFactor(0.7);//Overridden by smart dashboard
-        
-        
         //////////////		Gamepad		//////////////
         gamePad1 = new Gamepad(0);
         gamePad2 = new Gamepad(1);
-
+        
+        //////////////		Drivetrain		//////////////
+        drive = new DriveTrain<JaguarMotor>(
+        			new JaguarMotor(ElectricalConfig.wheel_frontLeft_pwm, ElectricalConfig.wheel_frontLeft_rev),
+        			new JaguarMotor(ElectricalConfig.wheel_frontRight_pwm, ElectricalConfig.wheel_frontRight_rev),
+        			new JaguarMotor(ElectricalConfig.wheel_backLeft_pwm, ElectricalConfig.wheel_backLeft_rev),
+        			new JaguarMotor(ElectricalConfig.wheel_backRight_pwm, ElectricalConfig.wheel_backRight_rev),
+        			gamePad1);
+        drive.setScaleFactor(0.7);//Overridden by smart dashboard
         
         gamePad1.sticks.setDeadzones();
         gamePad2.sticks.setDeadzones();
@@ -97,7 +95,7 @@ public class Robot extends IterativeRobot {
         //DONT KEEP
         CameraServer.getInstance().setQuality(50);
         CameraServer.getInstance().startAutomaticCapture("cam0");//Move to electical config
-        camera = new Camera(drive);
+        camera = new Camera();
         //TestCamera = new CameraServer();
         //microsoftCamera = new Camera();
         instance = this;//What does this do and why?
@@ -154,20 +152,29 @@ public class Robot extends IterativeRobot {
     	//Remove switch for comp, wastes cycles
     	switch(driveSelected) {
     		case driveNone:
-    			drive.tankDrive(0, 0);
+    			drive.setUpdate(false);
     			break;
 	    	case driveForza:
-	        	drive.forzaDrive(gamePad1.sticks.LEFT_X.getScaled(), gamePad1.trigger.getAxis());
-	        	break;
+	    		if (drive.getDriveType() != DriveTrain.FORZA_DRIVE)
+	    			drive.useForzaDrive();
+	        	if (!drive.shouldUpdate())
+	        		drive.setUpdate(true);
+	    		break;
 	    	case driveTank:
+	    		if (drive.getDriveType() != DriveTrain.TANK_DRIVE)
+	    			drive.useTankDrive();
+	    		if (!drive.shouldUpdate())
+	        		drive.setUpdate(true);
 	    	default:
-	        	drive.tankDrive(gamePad1.sticks.LEFT_Y.getScaled(), gamePad1.sticks.RIGHT_Y.getScaled());
+	        	
 	            break;
     	}
-    
+    	
+    	
+    	drive.updateMotors();
+    	
     	SmartDashboard.putString("isXbox", gamePad1.jstick.getName());
     	SmartDashboard.putBoolean("ButtonPressed", gamePad1.jstick.getRawButton((int)SmartDashboard.getNumber("buttonPort")));
-    	
     	
     	Watchcat.feed();
     }

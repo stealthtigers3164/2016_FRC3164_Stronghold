@@ -20,7 +20,7 @@ public class Camera
 			for (String CurrentKey : networkTableMotors.keySet()) {
 				MotorSet Set = getMotorSetByKey(CurrentKey);
 				if (Set.shouldUpdate())
-					Set.UpdateMotors();
+					Set.updateMotors();
 			}
 		}
 	}
@@ -34,6 +34,7 @@ public class Camera
 		return networkTables.get(KEY_TO_FIND_IN_MAP);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public <T extends MotorSet> T getMotorSetByKey(String KEY_TO_FIND_IN_MAP) {
 		return (T)networkTableMotors.get(KEY_TO_FIND_IN_MAP);
 	}

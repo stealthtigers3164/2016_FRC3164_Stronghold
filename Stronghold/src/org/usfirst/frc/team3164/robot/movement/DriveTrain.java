@@ -1,32 +1,49 @@
 package org.usfirst.frc.team3164.robot.movement;
 
-import org.usfirst.frc.team3164.robot.electrical.motor.BasicMotor;
+import java.util.ArrayList;
 
-public class DriveTrain {
+import org.usfirst.frc.team3164.robot.electrical.motor.BasicMotor;
+import org.usfirst.frc.team3164.robot.electrical.motor.MotorSet;
+import org.usfirst.frc.team3164.robot.input.Gamepad;
+
+public class DriveTrain<T extends BasicMotor> extends MotorSet<T> {
 	
-	private BasicMotor frontLeftMotor;	
-	private BasicMotor frontRightMotor;
-	private BasicMotor backLeftMotor;
-	private BasicMotor backRightMotor;	
+	public static final int FORZA_DRIVE = 0;
+	public static final int TANK_DRIVE = 1;
+	
+	private ArrayList<T> motors;
+	
+	private int frontLeftMotorIndex;	
+	private int frontRightMotorIndex;
+	private int backLeftMotorIndex;
+	private int backRightMotorIndex;	
 	
 	private double scaleFactor = 1;
 	private double scaleFactorX = 1;
 	
-	public DriveTrain(BasicMotor flMotor, BasicMotor frMotor, BasicMotor blMotor, BasicMotor brMotor) {
-		frontLeftMotor = flMotor;
-		frontRightMotor = frMotor;
-		backLeftMotor = blMotor;
-		backRightMotor = brMotor;
+	private Gamepad gamePad;
+	
+	private boolean update;
+	private int driveType;
+	
+	public DriveTrain(T flMotor, T frMotor, T blMotor, T brMotor, Gamepad gamePad) {
+		//NOTE if you change the order of which the motors are added then the indices will change as well
+		frontLeftMotorIndex = addMotor(flMotor);
+		frontRightMotorIndex = addMotor(frMotor);
+		backLeftMotorIndex = addMotor(blMotor);
+		backRightMotorIndex = addMotor(brMotor);
+		this.gamePad = gamePad;
+		driveType = FORZA_DRIVE;
 	}
 	
 	public void setRightPower(double pwr) {
-		backRightMotor.setPower(pwr);
-		frontRightMotor.setPower(pwr);
+		getMotorByIndex(backRightMotorIndex).setPower(pwr);
+		getMotorByIndex(frontRightMotorIndex).setPower(pwr);
 	}
 	
 	public void setLeftPower(double pwr) {
-		backLeftMotor.setPower(pwr);
-		frontLeftMotor.setPower(pwr);
+		getMotorByIndex(backLeftMotorIndex).setPower(pwr);
+		getMotorByIndex(frontLeftMotorIndex).setPower(pwr);
 	}
 	
 	public void tankDrive(double leftJoy, double rightJoy) {
@@ -99,6 +116,61 @@ public class DriveTrain {
 			this.scaleFactor = Math.min(Math.abs(sf), 1) * Math.signum(sf);
 		}
 	}
+
+	@Override
+	public ArrayList<T> getMotors() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public T getMotorByIndex(int Index) {
+		return motors.get(Index);
+	}
+
+	@Override
+	public int addMotor(T Motor) {
+		if (motors.add(Motor))
+			return motors.size() - 1;
+		else
+			return -1;
+	}
+
+	@Override
+	public void updateMotors() {
+		
+		if (shouldUpdate()) {
+			switch(driveType) {
+			case FORZA_DRIVE:
+				forzaDrive(gamePad.sticks.LEFT_X.getScaled(), gamePad.trigger.getAxis());
+				break;
+			case TANK_DRIVE:
+				tankDrive(gamePad.sticks.LEFT_Y.getScaled(), gamePad.sticks.RIGHT_Y.getScaled());
+				break;
+			default:
+				new IllegalStateException("The Drive Type is not tank drive or forza drive, it may be not initialized");
+			}
+		}
+	}
+
+	@Override
+	public boolean shouldUpdate() {
+		return update;
+	}
 	
+	public void setUpdate(boolean Update) {
+		update = Update;
+	}
 	
+	public void useTankDrive() {
+		driveType = TANK_DRIVE;
+	}
+	
+	public void useForzaDrive() {
+		driveType = FORZA_DRIVE;
+	}
+	
+	public int getDriveType() {
+		return driveType;
+	}
 }
