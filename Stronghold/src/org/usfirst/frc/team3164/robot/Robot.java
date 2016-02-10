@@ -45,8 +45,6 @@ public class Robot extends IterativeRobot {
     private Gamepad gamePad1;
     private Gamepad gamePad2;
     private Camera camera;
-
-    private BallShooter<JaguarMotor> ballShooter;
     
     //private AnalogInput sensorRange;
     
@@ -94,14 +92,6 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putNumber("Driving Scale Factor", 0.7);
         SmartDashboard.putNumber("Turning Scale Factor", 0.5);
-                
-        //////////////      Ball Shooter      //////////////
-        
-        /*
-        ballShooter = new BallShooter<JaguarMotor>(
-        		new JaguarMotor(ElectricalConfig.ball_shooter_motor), 
-        		ElectricalConfig.ball_shooter_encoder_channel_a, 
-        		ElectricalConfig.ball_shooter_encoder_channel_b); */
         
         //////////////		Sensors		//////////////
         //sensorRange = new AnalogInput(electricalConfig.analog_ultrasonic_port);
@@ -194,10 +184,6 @@ public class Robot extends IterativeRobot {
 	    	default:
 	        	
 	            break;
-    	}
-    	
-    	if (gamePad2.buttons.BUTTON_A.isOn()) {
-    		//ballShooter.shoot(1);
     	}
     	
     	drive.updateMotors();

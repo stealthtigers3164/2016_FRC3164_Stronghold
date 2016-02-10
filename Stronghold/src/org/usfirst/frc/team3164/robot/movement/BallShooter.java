@@ -3,11 +3,16 @@ package org.usfirst.frc.team3164.robot.movement;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.usfirst.frc.team3164.robot.electrical.motor.BasicMotor;
+import org.usfirst.frc.team3164.robot.thread.ThreadMethod;
+import org.usfirst.frc.team3164.robot.thread.ThreadQueue;
+import org.usfirst.frc.team3164.robot.thread.WorkerThread;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class BallShooter<T extends BasicMotor> {
+	
+	private WorkerThread workerThread;
 	private boolean shooterStarted;
 	
 	private T motor;
@@ -16,15 +21,15 @@ public class BallShooter<T extends BasicMotor> {
 	private ReentrantLock rpmThreadLock = new ReentrantLock();
 	
 	private int wantedRPMSpeed;
+	private boolean threadInitialized = false;
 	
 	public BallShooter(T flywheelM, int EncoderChannelA, int EncoderChannelB) {
 		this.motor = flywheelM;
 		motorEncoder = new Encoder(EncoderChannelA, EncoderChannelB);
 		shooterStarted = false;
-	}
-	
-	public void initRPMThread() {
-		rpmThread = new Thread("") {
+		
+		workerThread = new WorkerThread(false, "BallShooterThread");
+		workerThread.setThreadMethod(new ThreadMethod() {
 			@Override 
 			public void run() {
 				getRPMMotorLock().lock();
@@ -41,8 +46,13 @@ public class BallShooter<T extends BasicMotor> {
 				}
 				getRPMMotorLock().unlock();
 			}
-		};
-		rpmThread.start();
+		});
+
+	}
+	
+	public void initRPMThread(ThreadQueue<WorkerThread> threadQueue) {		
+		threadInitialized = true;
+		threadQueue.add(workerThread, true);		
 	}
 	
 	public T getMotor() {
@@ -62,9 +72,11 @@ public class BallShooter<T extends BasicMotor> {
 	}
 	
 	public void shoot(float distance) {
-		if (!rpmThread.isAlive()) {
-			initRPMThread();
+		
+		if (!threadInitialized) {
+			throw new IllegalStateException("Ball wheel shooter thread has not been started yet");
 		}
+		
 		boolean usedLock = false;
 		if (getRPMMotorLock().isLocked()) {
 			
