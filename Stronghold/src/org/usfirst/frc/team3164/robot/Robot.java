@@ -6,6 +6,7 @@ import org.usfirst.frc.team3164.robot.comms.Watchcat;
 import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
 import org.usfirst.frc.team3164.robot.electrical.motor.JaguarMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
+import org.usfirst.frc.team3164.robot.movement.BallShooter;
 import org.usfirst.frc.team3164.robot.movement.DriveTrain;
 import org.usfirst.frc.team3164.robot.vision.Camera;
 
@@ -45,6 +46,8 @@ public class Robot extends IterativeRobot {
     private Gamepad gamePad2;
     private Camera camera;
 
+    private BallShooter<JaguarMotor> ballShooter;
+    
     //private AnalogInput sensorRange;
     
     //private Camera microsoftCamera;
@@ -92,6 +95,14 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Driving Scale Factor", 0.7);
         SmartDashboard.putNumber("Turning Scale Factor", 0.5);
                 
+        //////////////      Ball Shooter      //////////////
+        
+        /*
+        ballShooter = new BallShooter<JaguarMotor>(
+        		new JaguarMotor(ElectricalConfig.ball_shooter_motor), 
+        		ElectricalConfig.ball_shooter_encoder_channel_a, 
+        		ElectricalConfig.ball_shooter_encoder_channel_b); */
+        
         //////////////		Sensors		//////////////
         //sensorRange = new AnalogInput(electricalConfig.analog_ultrasonic_port);
         
@@ -185,6 +196,9 @@ public class Robot extends IterativeRobot {
 	            break;
     	}
     	
+    	if (gamePad2.buttons.BUTTON_A.isOn()) {
+    		//ballShooter.shoot(1);
+    	}
     	
     	drive.updateMotors();
     	

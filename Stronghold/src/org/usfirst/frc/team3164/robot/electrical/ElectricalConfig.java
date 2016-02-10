@@ -15,5 +15,8 @@ public class ElectricalConfig {
 	
 	public static final int analog_ultrasonic_port = 3;
 	
+	public static final int ball_shooter_motor = 4;
 
+	public static final int ball_shooter_encoder_channel_a = 5;
+	public static final int ball_shooter_encoder_channel_b = 6;
 }
