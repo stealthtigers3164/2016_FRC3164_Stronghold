@@ -2,19 +2,21 @@
 package org.usfirst.frc.team3164.robot;
 
 import java.io.IOException;
+
 import org.usfirst.frc.team3164.robot.comms.Watchcat;
 import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
 import org.usfirst.frc.team3164.robot.electrical.motor.JaguarMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
-import org.usfirst.frc.team3164.robot.movement.BallShooter;
 import org.usfirst.frc.team3164.robot.movement.DriveTrain;
+import org.usfirst.frc.team3164.robot.movement.FlyWheel;
+import org.usfirst.frc.team3164.robot.thread.ThreadQueue;
+import org.usfirst.frc.team3164.robot.thread.WorkerThread;
 import org.usfirst.frc.team3164.robot.vision.Camera;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 
 /**
@@ -40,11 +42,14 @@ public class Robot extends IterativeRobot {
     private String driveSelected;
     private SendableChooser chooserDT;
 
+    private FlyWheel shooter;
     
     private DriveTrain<JaguarMotor> drive;
     private Gamepad gamePad1;
     private Gamepad gamePad2;
     private Camera camera;
+    
+    private ThreadQueue<WorkerThread> queue;
     
     //private AnalogInput sensorRange;
     
@@ -92,6 +97,10 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putNumber("Driving Scale Factor", 0.7);
         SmartDashboard.putNumber("Turning Scale Factor", 0.5);
+        
+        queue = new ThreadQueue<WorkerThread>();
+        
+        shooter = new FlyWheel(queue, gamePad1);
         
         //////////////		Sensors		//////////////
         //sensorRange = new AnalogInput(electricalConfig.analog_ultrasonic_port);
@@ -185,6 +194,8 @@ public class Robot extends IterativeRobot {
 	        	
 	            break;
     	}
+    	
+    	shooter.update(0);
     	
     	drive.updateMotors();
     	

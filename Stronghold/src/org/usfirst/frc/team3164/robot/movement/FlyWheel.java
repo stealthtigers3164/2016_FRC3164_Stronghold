@@ -6,6 +6,8 @@ import org.usfirst.frc.team3164.robot.input.Gamepad;
 import org.usfirst.frc.team3164.robot.thread.ThreadQueue;
 import org.usfirst.frc.team3164.robot.thread.WorkerThread;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class FlyWheel {
 	
 	private BallShooter<JaguarMotor> shooter;
@@ -20,18 +22,20 @@ public class FlyWheel {
         shooter.initRPMThread(Queue);
 	}
 	
-	public void update() {/*
+	public void update(float DistanceSensorData) {
     	if (gamePad.buttons.BUTTON_A.isOn()) {
-    		shoot(); 
-    	}*/
+    		//shoot(DistanceSensorData); 
+    	}
+    	
+    	SmartDashboard.putBoolean("Shooting", false);//gamePad.buttons.BUTTON_A.isOn());
 	}
 	
-	public void shoot() {
-		float distance = calculateDistanceBySensor();
+	public void shoot(float RawData) {
+		float distance = calculateDistanceBySensor(RawData);
 		shooter.shoot(distance);
 	}
 	
-	public float calculateDistanceBySensor() {
+	public float calculateDistanceBySensor(float RawData) {
 		return 0;
 	}
 	
