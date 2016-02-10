@@ -28,6 +28,7 @@ public class DriveTrain<T extends BasicMotor> extends MotorSet<T> {
 	
 	public DriveTrain(T flMotor, T frMotor, T blMotor, T brMotor, Gamepad gamePad) {
 		//NOTE if you change the order of which the motors are added then the indices will change as well
+		motors = new ArrayList<T>();
 		frontLeftMotorIndex = addMotor(flMotor);
 		frontRightMotorIndex = addMotor(frMotor);
 		backLeftMotorIndex = addMotor(blMotor);

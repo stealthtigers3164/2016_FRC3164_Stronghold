@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team3164.robot;
 
+import java.io.IOException;
 import org.usfirst.frc.team3164.robot.comms.Watchcat;
 import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
 import org.usfirst.frc.team3164.robot.electrical.motor.JaguarMotor;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 
 /**
@@ -51,6 +53,8 @@ public class Robot extends IterativeRobot {
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
+    private final NetworkTable grip = NetworkTable.getTable("grip");
+
     public void robotInit() {
     	//TEMP
     	chooser = new SendableChooser();
@@ -93,8 +97,14 @@ public class Robot extends IterativeRobot {
         
         
         //DONT KEEP
-        CameraServer.getInstance().setQuality(50);
-        CameraServer.getInstance().startAutomaticCapture("cam0");//Move to electical config
+        //CameraServer.getInstance().setQuality(50);
+        //CameraServer.getInstance().startAutomaticCapture("cam0");//Move to electical config
+        
+        try {
+            new ProcessBuilder("/home/lvuser/grip").inheritIO().start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         camera = new Camera();
         //TestCamera = new CameraServer();
         //microsoftCamera = new Camera();
@@ -111,15 +121,16 @@ public class Robot extends IterativeRobot {
 	 * If using the SendableChooser make sure to add them to the chooser code above as well.
 	 */
     public void autonomousInit() {
-    	autoSelected = (String) chooser.getSelected();
-//		autoSelected = SmartDashboard.getString("Auto Selector", defaultAuto);
-		System.out.println("Auto selected: " + autoSelected);
+    	
     }
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
+    	for (double area : grip.getNumberArray("theContoursReport/area", new double[0])) {
+            System.out.println("Got contour with area=" + area);
+        }
     	switch(autoSelected) {
     	case customAuto:
         //Put custom auto code here   
@@ -145,8 +156,12 @@ public class Robot extends IterativeRobot {
     	drive.setScaleFactor(SmartDashboard.getNumber("Turning Scale Factor"), true);
     	
     	//Testing
-    	SmartDashboard.putBoolean("ImageTest", CameraServer.getInstance().isAutoCaptureStarted());
+    	//SmartDashboard.putBoolean("ImageTest", CameraServer.getInstance().isAutoCaptureStarted());
     	//SmartDashboard.putNumber("analog", sensorRange.getAverageVoltage());
+    	
+    	autoSelected = (String) chooser.getSelected();
+//		autoSelected = SmartDashboard.getString("Auto Selector", defaultAuto);
+		System.out.println("Auto selected: " + autoSelected);
     	
     	
     	//Remove switch for comp, wastes cycles
