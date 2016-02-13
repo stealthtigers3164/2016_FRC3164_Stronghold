@@ -9,6 +9,7 @@ import org.usfirst.frc.team3164.robot.electrical.motor.JaguarMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
 import org.usfirst.frc.team3164.robot.movement.DriveTrain;
 import org.usfirst.frc.team3164.robot.movement.FlyWheel;
+import org.usfirst.frc.team3164.robot.movement.Intake;
 import org.usfirst.frc.team3164.robot.thread.ThreadQueue;
 import org.usfirst.frc.team3164.robot.thread.WorkerThread;
 import org.usfirst.frc.team3164.robot.vision.Camera;
@@ -51,6 +52,8 @@ public class Robot extends IterativeRobot {
     
     private ThreadQueue<WorkerThread> queue;
     
+    private Intake<JaguarMotor> intake;
+    
     //private AnalogInput sensorRange;
     
     //private Camera microsoftCamera;
@@ -84,6 +87,9 @@ public class Robot extends IterativeRobot {
         			new JaguarMotor(ElectricalConfig.wheel_backRight_pwm, ElectricalConfig.wheel_backRight_rev),
         			gamePad1);
         drive.setScaleFactor(0.7);//Overridden by smart dashboard
+        
+        intake = new Intake<JaguarMotor>(gamePad2,
+        		new JaguarMotor(ElectricalConfig.intake_motor));
         
         gamePad1.sticks.setDeadzones();
         gamePad2.sticks.setDeadzones();
@@ -153,7 +159,6 @@ public class Robot extends IterativeRobot {
     }
     public void teleopInit() {
     	SmartDashboard.putString("Mode", "Teleop");
-    	
     	SmartDashboard.putNumber("buttonPort", 1);
     }
     
@@ -195,9 +200,11 @@ public class Robot extends IterativeRobot {
 	            break;
     	}
     	
-    	shooter.update(0);
+    	shooter.update(0);	
     	
     	drive.updateMotors();
+    	
+    	//intake.updateMotors();
     	
     	SmartDashboard.putString("isXbox", gamePad1.jstick.getName());
     	SmartDashboard.putBoolean("ButtonPressed", gamePad1.jstick.getRawButton((int)SmartDashboard.getNumber("buttonPort")));

@@ -19,4 +19,7 @@ public class ElectricalConfig {
 
 	public static final int ball_shooter_encoder_channel_a = 5;
 	public static final int ball_shooter_encoder_channel_b = 6;
+	
+	
+	public static final int intake_motor = 7;
 }
