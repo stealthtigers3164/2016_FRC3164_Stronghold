@@ -102,11 +102,35 @@
       <grip:Input step="5" socket="0"/>
       <grip:Output step="5" socket="0" previewed="true"/>
     </grip:Step>
+    <grip:Step name="Publish ContoursReport">
+      <grip:Input step="6" socket="0"/>
+      <grip:Input step="6" socket="1">
+        <value>GoalContours</value>
+      </grip:Input>
+      <grip:Input step="6" socket="2">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="6" socket="3">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="6" socket="4">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="6" socket="5">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="6" socket="6">
+        <value>true</value>
+      </grip:Input>
+      <grip:Input step="6" socket="7">
+        <value>true</value>
+      </grip:Input>
+    </grip:Step>
   </steps>
   <connections>
     <grip:Connection>
-      <grip:Output step="3" socket="0" previewed="false"/>
-      <grip:Input step="4" socket="0"/>
+      <grip:Output step="2" socket="0" previewed="true"/>
+      <grip:Input step="3" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="0" socket="0" previewed="true"/>
@@ -117,12 +141,16 @@
       <grip:Input step="5" socket="0"/>
     </grip:Connection>
     <grip:Connection>
+      <grip:Output step="3" socket="0" previewed="false"/>
+      <grip:Input step="4" socket="0"/>
+    </grip:Connection>
+    <grip:Connection>
       <grip:Output source="3" socket="0" previewed="false"/>
       <grip:Input step="0" socket="0"/>
     </grip:Connection>
     <grip:Connection>
-      <grip:Output step="2" socket="0" previewed="true"/>
-      <grip:Input step="3" socket="0"/>
+      <grip:Output step="5" socket="0" previewed="true"/>
+      <grip:Input step="6" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="1" socket="0" previewed="true"/>

@@ -62,7 +62,7 @@ public class Robot extends IterativeRobot {
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
-    private final NetworkTable grip = NetworkTable.getTable("grip");
+    //private /*final*/ NetworkTable grip = NetworkTable.getTable("grip");
 
     public void robotInit() {
     	//TEMP
@@ -116,11 +116,11 @@ public class Robot extends IterativeRobot {
         //CameraServer.getInstance().setQuality(50);
         //CameraServer.getInstance().startAutomaticCapture("cam0");//Move to electical config
         
-        try {
+        /*try {
             new ProcessBuilder("/home/lvuser/grip").inheritIO().start();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         camera = new Camera();
         //TestCamera = new CameraServer();
         //microsoftCamera = new Camera();
@@ -144,9 +144,9 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	for (double area : grip.getNumberArray("theContoursReport/area", new double[0])) {
-            System.out.println("Got contour with area=" + area);
-        }
+    	//for (double area : grip.getNumberArray("GoalContours/area", new double[0])) {
+           // System.out.println("Got contour with area=" + area);
+        //}
     	switch(autoSelected) {
     	case customAuto:
         //Put custom auto code here   
