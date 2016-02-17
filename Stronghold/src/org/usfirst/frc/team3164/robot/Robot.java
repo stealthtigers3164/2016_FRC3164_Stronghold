@@ -4,15 +4,21 @@ package org.usfirst.frc.team3164.robot;
 import java.io.IOException;
 
 import org.usfirst.frc.team3164.robot.comms.Watchcat;
+
 import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
 import org.usfirst.frc.team3164.robot.electrical.motor.JaguarMotor;
+
 import org.usfirst.frc.team3164.robot.input.Gamepad;
+
 import org.usfirst.frc.team3164.robot.movement.DriveTrain;
 import org.usfirst.frc.team3164.robot.movement.FlyWheel;
 import org.usfirst.frc.team3164.robot.movement.Intake;
+
 import org.usfirst.frc.team3164.robot.thread.ThreadQueue;
 import org.usfirst.frc.team3164.robot.thread.WorkerThread;
+
 import org.usfirst.frc.team3164.robot.vision.Camera;
+import org.usfirst.frc.team3164.robot.vision.GoalAlign;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -143,6 +149,7 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during autonomous
      */
+    GoalAlign testGoal = new GoalAlign("GoalContours");
     public void autonomousPeriodic() {
     	//for (double area : grip.getNumberArray("GoalContours/area", new double[0])) {
            // System.out.println("Got contour with area=" + area);
@@ -155,8 +162,13 @@ public class Robot extends IterativeRobot {
     	default:
     	//Put default auto code here
             break;
-    	} 
+    	}
+    	testGoal.updateByLargestArea();
+    	SmartDashboard.putNumber("DistanceXfromCenter", testGoal.getHorizontalDistanceFromCenter());
+    	
     }
+    
+    
     public void teleopInit() {
     	SmartDashboard.putString("Mode", "Teleop");
     	SmartDashboard.putNumber("buttonPort", 1);

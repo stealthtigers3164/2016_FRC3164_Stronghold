@@ -39,4 +39,5 @@ public class GoalAlign {
 	public double getVerticalDistanceFromCenter() {
 		return 0.5 * (imageHeight - centerY);
 	}
+	
 }
