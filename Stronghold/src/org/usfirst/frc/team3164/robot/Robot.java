@@ -58,7 +58,7 @@ public class Robot extends IterativeRobot {
     
     private ThreadQueue<WorkerThread> queue;
     
-    private Intake<JaguarMotor> intake;
+    private Intake<JaguarMotor> inftake;
     
     //private AnalogInput sensorRange;
     
@@ -94,8 +94,8 @@ public class Robot extends IterativeRobot {
         			gamePad1);
         drive.setScaleFactor(0.7);//Overridden by smart dashboard
         
-        intake = new Intake<JaguarMotor>(gamePad2,
-        		new JaguarMotor(ElectricalConfig.intake_motor));
+        //intake = new Intake<JaguarMotor>(gamePad2,
+        	//	new JaguarMotor(ElectricalConfig.intake_motor));
         
         gamePad1.sticks.setDeadzones();
         gamePad2.sticks.setDeadzones();
@@ -154,7 +154,7 @@ public class Robot extends IterativeRobot {
     	//for (double area : grip.getNumberArray("GoalContours/area", new double[0])) {
            // System.out.println("Got contour with area=" + area);
         //}
-    	switch(autoSelected) {
+    	/*switch(autoSelected) {
     	case customAuto:
         //Put custom auto code here   
             break;
@@ -162,7 +162,7 @@ public class Robot extends IterativeRobot {
     	default:
     	//Put default auto code here
             break;
-    	}
+    	}*/
     	testGoal.updateByLargestArea();
     	SmartDashboard.putNumber("DistanceXfromCenter", testGoal.getHorizontalDistanceFromCenter());
     	
