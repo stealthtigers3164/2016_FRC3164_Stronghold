@@ -47,9 +47,17 @@ public class GoalAlign {
 			//TODO Make if missing for more than two seconds
 		}
 	}
-
+	
 	public double getHorizontalDistanceFromCenter() {
-		return 0.5 * (imageWidth - centerX);
+		/*return 0.5 * (imageWidth - centerX);//It might work, but trying something different*/
+		//Returns positive values is box is to right of the robot
+		return (centerX - (imageWidth*0.5));
+		/*
+		If that doesnt work good try:
+		return ((centerX/imageWidth*100) - 50);
+		This returns a percent value, positive means box is to the right.
+		
+		*/
 	}
 
 	public double getVerticalDistanceFromCenter() {
