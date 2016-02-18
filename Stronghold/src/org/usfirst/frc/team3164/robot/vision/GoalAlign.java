@@ -16,6 +16,7 @@ public class GoalAlign {
 
 	private double imageHeight = 240;
 	private double imageWidth = 320;
+	private double lastUpdate;
 
 	public GoalAlign(String ContourReportName) {
 		this.reportName = ContourReportName;// GoalContours i think
@@ -37,6 +38,7 @@ public class GoalAlign {
 			this.width = grip.getNumberArray(reportName + "/width"/*, new double[0]*/)[largestIndex];
 			this.height = grip.getNumberArray(reportName + "/height", new double[0])[largestIndex];
 			this.solidity = grip.getNumberArray(reportName + "/solidity", new double[0])[largestIndex];
+			this.lastUpdate = Time.now();
 		} else {
 			/*this.area = 0;
 			this.centerX = 0;
