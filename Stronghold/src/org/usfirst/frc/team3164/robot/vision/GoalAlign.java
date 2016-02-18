@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3164.robot.vision;
 
+import java.util.Date;
+
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -16,15 +18,19 @@ public class GoalAlign {
 
 	private double imageHeight = 240;
 	private double imageWidth = 320;
-	private double lastUpdate;
-
+	
+	private long lastUpdate;
+	private int timeout = 300;//Might need to change
+	
 	public GoalAlign(String ContourReportName) {
 		this.reportName = ContourReportName;// GoalContours i think
+		this.lastUpdate = new Date().getTime();
+		
 	}
 
 	public void updateByLargestArea() {
 
-		double[] arrayArea = grip.getNumberArray(reportName + "/area");
+		double[] arrayArea = grip.getNumberArray(reportName + "/area", new double[0]);///?*******New Double might need to be taken out.
 		SmartDashboard.putNumber("ARRAY LENGTH", arrayArea.length);
 		if (arrayArea.length > 0) {
 			int largestIndex = 0;
@@ -32,27 +38,33 @@ public class GoalAlign {
 				if (arrayArea[i] > arrayArea[largestIndex])
 					largestIndex = i;
 			} 
-			this.area = grip.getNumberArray(reportName + "/area"/*, new double[0]*/)[largestIndex];
-			this.centerX = grip.getNumberArray(reportName + "/centerX"/*, new double[0]*/)[largestIndex];
-			this.centerY = grip.getNumberArray(reportName + "/centerY"/*, new double[0]*/)[largestIndex];
-			this.width = grip.getNumberArray(reportName + "/width"/*, new double[0]*/)[largestIndex];
+			this.area = grip.getNumberArray(reportName + "/area", new double[0])[largestIndex];
+			this.centerX = grip.getNumberArray(reportName + "/centerX", new double[0])[largestIndex];
+			this.centerY = grip.getNumberArray(reportName + "/centerY", new double[0])[largestIndex];
+			this.width = grip.getNumberArray(reportName + "/width", new double[0])[largestIndex];
 			this.height = grip.getNumberArray(reportName + "/height", new double[0])[largestIndex];
 			this.solidity = grip.getNumberArray(reportName + "/solidity", new double[0])[largestIndex];
-			this.lastUpdate = Time.now();
+			
+			this.lastUpdate = new Date().getTime();
 		} else {
-			/*this.area = 0;
-			this.centerX = 0;
-			this.centerY = 0;
-			this.width = 0;
-			this.height = 0;
-			this.solidity = 0;*/
-			//TODO Make if missing for more than two seconds
+			if((this.lastUpdate + this.timeout) <= (new Date().getTime())) {
+				//Not tested, supposed to make sure it doesnt disappear for a split second.
+				this.area = 0;
+				this.centerX = 0;
+				this.centerY = 0;
+				this.width = 0;
+				this.height = 0;
+				this.solidity = 0;
+			}
+			
+		
 		}
 	}
 	
 	public double getHorizontalDistanceFromCenter() {
 		/*return 0.5 * (imageWidth - centerX);//It might work, but trying something different*/
 		//Returns positive values is box is to right of the robot
+		if(centerX == 0) return 0;
 		return (centerX - (imageWidth*0.5));
 		/*
 		If that doesnt work good try:
@@ -63,7 +75,9 @@ public class GoalAlign {
 	}
 
 	public double getVerticalDistanceFromCenter() {
-		return 0.5 * (imageHeight - centerY);
+		return 0.5 * (imageHeight - centerY);//Change to match a working horizontaldist
 	}
+	
+	//Log areas with distance from analog when shooting in a log file!!!!!!!!!!!!!
 
 }
