@@ -14,8 +14,8 @@ public class GoalAlign {
 	public double height;
 	public double solidity;
 
-	private double imageHeight = 320;
-	private double imageWidth = 240;
+	private double imageHeight = 240;
+	private double imageWidth = 320;
 
 	public GoalAlign(String ContourReportName) {
 		this.reportName = ContourReportName;// GoalContours i think
