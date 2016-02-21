@@ -1,27 +1,19 @@
 
 package org.usfirst.frc.team3164.robot;
 
-import java.io.IOException;
-
 import org.usfirst.frc.team3164.robot.comms.Watchcat;
-
 import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
-import org.usfirst.frc.team3164.robot.electrical.motor.JaguarMotor;
-
+import org.usfirst.frc.team3164.robot.electrical.motor.SparkMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
-
 import org.usfirst.frc.team3164.robot.movement.DriveTrain;
 import org.usfirst.frc.team3164.robot.movement.FlyWheel;
 import org.usfirst.frc.team3164.robot.movement.Intake;
-
 import org.usfirst.frc.team3164.robot.thread.ThreadQueue;
 import org.usfirst.frc.team3164.robot.thread.WorkerThread;
-
 import org.usfirst.frc.team3164.robot.vision.Camera;
 import org.usfirst.frc.team3164.robot.vision.GoalAlign;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -51,14 +43,14 @@ public class Robot extends IterativeRobot {
 
     private FlyWheel shooter;
     
-    private DriveTrain<JaguarMotor> drive;
+    private DriveTrain<SparkMotor> drive;
     private Gamepad gamePad1;
     private Gamepad gamePad2;
     private Camera camera;
     
     private ThreadQueue<WorkerThread> queue;
     
-    private Intake<JaguarMotor> inftake;
+    private Intake<SparkMotor> inftake;
     
     //private AnalogInput sensorRange;
     
@@ -86,16 +78,16 @@ public class Robot extends IterativeRobot {
         gamePad2 = new Gamepad(1);
         
         //////////////		Drivetrain		//////////////
-        drive = new DriveTrain<JaguarMotor>(
-        			new JaguarMotor(ElectricalConfig.wheel_frontLeft_pwm, ElectricalConfig.wheel_frontLeft_rev),
-        			new JaguarMotor(ElectricalConfig.wheel_frontRight_pwm, ElectricalConfig.wheel_frontRight_rev),
-        			new JaguarMotor(ElectricalConfig.wheel_backLeft_pwm, ElectricalConfig.wheel_backLeft_rev),
-        			new JaguarMotor(ElectricalConfig.wheel_backRight_pwm, ElectricalConfig.wheel_backRight_rev),
+        drive = new DriveTrain<SparkMotor>(
+        			new SparkMotor(ElectricalConfig.wheel_frontLeft_pwm, ElectricalConfig.wheel_frontLeft_rev),
+        			new SparkMotor(ElectricalConfig.wheel_frontRight_pwm, ElectricalConfig.wheel_frontRight_rev),
+        			new SparkMotor(ElectricalConfig.wheel_backLeft_pwm, ElectricalConfig.wheel_backLeft_rev),
+        			new SparkMotor(ElectricalConfig.wheel_backRight_pwm, ElectricalConfig.wheel_backRight_rev),
         			gamePad1);
         drive.setScaleFactor(0.7);//Overridden by smart dashboard
         
-        //intake = new Intake<JaguarMotor>(gamePad2,
-        	//	new JaguarMotor(ElectricalConfig.intake_motor));
+        //intake = new Intake<SparkMotor>(gamePad2,
+        	//	new  Motor(ElectricalConfig.intake_motor));
         
         gamePad1.sticks.setDeadzones();
         gamePad2.sticks.setDeadzones();
