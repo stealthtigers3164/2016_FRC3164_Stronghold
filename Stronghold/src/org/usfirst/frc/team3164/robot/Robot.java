@@ -3,6 +3,7 @@ package org.usfirst.frc.team3164.robot;
 
 import org.usfirst.frc.team3164.robot.comms.Watchcat;
 import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
+import org.usfirst.frc.team3164.robot.electrical.motor.Arm;
 import org.usfirst.frc.team3164.robot.electrical.motor.SparkMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
 import org.usfirst.frc.team3164.robot.movement.DriveTrain;
@@ -51,6 +52,7 @@ public class Robot extends IterativeRobot {
     private ThreadQueue<WorkerThread> queue;
     
     private Intake<SparkMotor> intake;
+    private Arm<SparkMotor> arm;
     
     //private AnalogInput sensorRange;
     
@@ -88,6 +90,7 @@ public class Robot extends IterativeRobot {
         
         intake = new Intake<SparkMotor>(gamePad2,
         		new  SparkMotor(ElectricalConfig.intake_motor));
+        //arm = new Arm<SparkMotor>(gamePad2, new SparkMotor(ElectricalConfig.arm_pwn));
         
         gamePad1.sticks.setDeadzones();
         gamePad2.sticks.setDeadzones();
@@ -104,7 +107,7 @@ public class Robot extends IterativeRobot {
         
         queue = new ThreadQueue<WorkerThread>();
         
-        shooter = new FlyWheel(queue, gamePad1);
+        shooter = new FlyWheel(queue, gamePad2);
         
         //////////////		Sensors		//////////////
         //sensorRange = new AnalogInput(electricalConfig.analog_ultrasonic_port);
