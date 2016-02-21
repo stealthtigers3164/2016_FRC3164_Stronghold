@@ -11,13 +11,13 @@ public class Intake<T extends BasicMotor> extends MotorSet<T> {
 	private Gamepad gamePad;
 
 	private int motorIndex;
-	
+
 	public Intake(Gamepad Pad, T motor) {
 		gamePad = Pad;
 		motors = new ArrayList<T>();
 		motorIndex = addMotor(motor);
 	}
-	
+
 	@Override
 	public ArrayList<T> getMotors() {
 		return motors;
@@ -37,12 +37,10 @@ public class Intake<T extends BasicMotor> extends MotorSet<T> {
 	@Override
 	public void updateMotors() {
 		if (shouldUpdate()) {
-			for (T motor : motors) {
-				if (gamePad.trigger.getLeftVal() != 0)
-					motor.setPower(gamePad.trigger.getLeftVal());
-				else if (gamePad.trigger.getRightVal() != 0)
-					motor.setPower(gamePad.trigger.getRightVal());
-			}
+			if (gamePad.trigger.getLeftVal() != 0)
+				motors.get(motorIndex).setPower(gamePad.trigger.getLeftVal());
+			else if (gamePad.trigger.getRightVal() != 0)
+				motors.get(motorIndex).setPower(gamePad.trigger.getRightVal());
 		}
 	}
 

@@ -50,7 +50,7 @@ public class Robot extends IterativeRobot {
     
     private ThreadQueue<WorkerThread> queue;
     
-    private Intake<SparkMotor> inftake;
+    private Intake<SparkMotor> intake;
     
     //private AnalogInput sensorRange;
     
@@ -86,8 +86,8 @@ public class Robot extends IterativeRobot {
         			gamePad1);
         drive.setScaleFactor(0.7);//Overridden by smart dashboard
         
-        //intake = new Intake<SparkMotor>(gamePad2,
-        	//	new  Motor(ElectricalConfig.intake_motor));
+        intake = new Intake<SparkMotor>(gamePad2,
+        		new  SparkMotor(ElectricalConfig.intake_motor));
         
         gamePad1.sticks.setDeadzones();
         gamePad2.sticks.setDeadzones();
@@ -204,6 +204,7 @@ public class Robot extends IterativeRobot {
 	            break;
     	}
     	
+    	intake.updateMotors();
     	shooter.update(0);	
     	
     	drive.updateMotors();
