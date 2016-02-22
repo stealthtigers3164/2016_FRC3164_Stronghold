@@ -207,7 +207,7 @@ public class Robot extends IterativeRobot {
 	            break;
     	}
     	
-    	feeder.updateMotors(shooter);
+    	//feeder.updateMotors(shooter);
     	shooter.update(0);	
     	
     	drive.updateMotors();
