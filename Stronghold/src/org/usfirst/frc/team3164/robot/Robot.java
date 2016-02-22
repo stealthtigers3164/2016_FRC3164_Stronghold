@@ -8,7 +8,7 @@ import org.usfirst.frc.team3164.robot.electrical.motor.SparkMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
 import org.usfirst.frc.team3164.robot.movement.DriveTrain;
 import org.usfirst.frc.team3164.robot.movement.FlyWheel;
-import org.usfirst.frc.team3164.robot.movement.Intake;
+import org.usfirst.frc.team3164.robot.movement.Feeder;
 import org.usfirst.frc.team3164.robot.thread.ThreadQueue;
 import org.usfirst.frc.team3164.robot.thread.WorkerThread;
 import org.usfirst.frc.team3164.robot.vision.Camera;
@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot {
     
     private ThreadQueue<WorkerThread> queue;
     
-    private Intake<SparkMotor> intake;
+    private Feeder<SparkMotor> feeder;
     private Arm<SparkMotor> arm;
     
     //private AnalogInput sensorRange;
@@ -88,8 +88,8 @@ public class Robot extends IterativeRobot {
         			gamePad1);
         drive.setScaleFactor(0.7);//Overridden by smart dashboard
         
-        intake = new Intake<SparkMotor>(gamePad2,
-        		new  SparkMotor(ElectricalConfig.intake_motor));
+        feeder = new Feeder<SparkMotor>(gamePad2,
+        		new  SparkMotor(ElectricalConfig.feeder_motor), ElectricalConfig.feeder_limit_switch);
         //arm = new Arm<SparkMotor>(gamePad2, new SparkMotor(ElectricalConfig.arm_pwn));
         
         gamePad1.sticks.setDeadzones();
@@ -207,7 +207,7 @@ public class Robot extends IterativeRobot {
 	            break;
     	}
     	
-    	intake.updateMotors();
+    	feeder.updateMotors(shooter);
     	shooter.update(0);	
     	
     	drive.updateMotors();
