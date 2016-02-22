@@ -30,35 +30,39 @@ public class GoalAlign {
 
 	public void updateByLargestArea() {
 
-		double[] arrayArea = grip.getNumberArray(reportName + "/area", new double[0]);///?*******New Double might need to be taken out.
-		SmartDashboard.putNumber("ARRAY LENGTH", arrayArea.length);
-		if (arrayArea.length > 0) {
-			int largestIndex = 0;
-			for (int i = 0; i < arrayArea.length; i++) {
-				if (arrayArea[i] > arrayArea[largestIndex])
-					largestIndex = i;
-			} 
-			this.area = grip.getNumberArray(reportName + "/area", new double[0])[largestIndex];
-			this.centerX = grip.getNumberArray(reportName + "/centerX", new double[0])[largestIndex];
-			this.centerY = grip.getNumberArray(reportName + "/centerY", new double[0])[largestIndex];
-			this.width = grip.getNumberArray(reportName + "/width", new double[0])[largestIndex];
-			this.height = grip.getNumberArray(reportName + "/height", new double[0])[largestIndex];
-			this.solidity = grip.getNumberArray(reportName + "/solidity", new double[0])[largestIndex];
+		
+		try {
+			double[] arrayArea = grip.getNumberArray(reportName + "/area", new double[0]);///?*******New Double might need to be taken out.
+			SmartDashboard.putNumber("ARRAY LENGTH", arrayArea.length);
+			if (arrayArea.length > 0f) {
+				int largestIndex = 0;
+				for (int i = 0; i < arrayArea.length; i++) {
+					if (arrayArea[i] > arrayArea[largestIndex])
+						largestIndex = i;
+				} 
+				this.area = grip.getNumberArray(reportName + "/area", new double[0])[largestIndex];
+				this.centerX = grip.getNumberArray(reportName + "/centerX", new double[0])[largestIndex];
+				this.centerY = grip.getNumberArray(reportName + "/centerY", new double[0])[largestIndex];
+				this.width = grip.getNumberArray(reportName + "/width", new double[0])[largestIndex];
+				this.height = grip.getNumberArray(reportName + "/height", new double[0])[largestIndex];
+				this.solidity = grip.getNumberArray(reportName + "/solidity", new double[0])[largestIndex];
+				
+				this.lastUpdate = new Date().getTime();
+			} else {
+				if((this.lastUpdate + this.timeout) <= (new Date().getTime())) {
+					//Not tested, supposed to make sure it doesnt disappear for a split second.
+					this.zeroVariables();
+				}
+				
 			
-			this.lastUpdate = new Date().getTime();
-		} else {
+			}
+		} catch (Exception ex) {
 			if((this.lastUpdate + this.timeout) <= (new Date().getTime())) {
 				//Not tested, supposed to make sure it doesnt disappear for a split second.
-				this.area = 0;
-				this.centerX = 0;
-				this.centerY = 0;
-				this.width = 0;
-				this.height = 0;
-				this.solidity = 0;
+				this.zeroVariables();
 			}
-			
-		
 		}
+		
 	}
 	
 	public double getHorizontalDistanceFromCenter() {
@@ -78,6 +82,14 @@ public class GoalAlign {
 		return 0.5 * (imageHeight - centerY);//Change to match a working horizontaldist
 	}
 	
+	private void zeroVariables() {
+		this.area = 0;
+		this.centerX = 0;
+		this.centerY = 0;
+		this.width = 0;
+		this.height = 0;
+		this.solidity = 0;
+	}
 	//Log areas with distance from analog when shooting in a log file!!!!!!!!!!!!!
 
 }
