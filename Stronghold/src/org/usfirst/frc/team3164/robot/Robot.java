@@ -218,6 +218,12 @@ public class Robot extends IterativeRobot {
     	SmartDashboard.putBoolean("ButtonPressed", gamePad1.jstick.getRawButton((int)SmartDashboard.getNumber("buttonPort")));
     	
     	Watchcat.feed();
+    	
+    	if(gamePad1.buttons.BUTTON_BACK.isOn()) {
+    		gamePad1.rumble.rumbleLeft(1);
+    	} else {
+    		gamePad1.rumble.stop();
+    	}
     }
     
     /**
