@@ -16,7 +16,7 @@ public class TalonMotor implements BasicMotor {
      */
     public TalonMotor(int pwmLoc) {
         this.pwmLoc = pwmLoc;
-        this.m = new Jaguar(this.pwmLoc);
+        this.m = new Talon(this.pwmLoc);
         this.power = 0;
         Watchcat.registerMotor(this);
     }
