@@ -1,19 +1,24 @@
 package org.usfirst.frc.team3164.robot.testing;
 
 import org.usfirst.frc.team3164.robot.input.Gamepad;
+import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class outputTesting {
 	private Gamepad gamePad;
+	private AnalogInput sensorRange;
 	
 	public outputTesting(Gamepad Pad) {
 		gamePad = Pad;
+		sensorRange = new AnalogInput(ElectricalConfig.analog_ultrasonic_port);
 	}
 	
 	public void update() {
 		
 		gamepadTest();
+		analogTest();
 		
 		
 		
@@ -25,8 +30,12 @@ public class outputTesting {
     	} else {
     		gamePad.rumble.stop();
     	}
-		SmartDashboard.putString("isXbox", gamePad1.jstick.getName());
-    	SmartDashboard.putBoolean("ButtonPressed", gamePad1.jstick.getRawButton((int)SmartDashboard.getNumber("buttonPort")));
+		SmartDashboard.putString("isXbox", gamePad.jstick.getName());
+    	SmartDashboard.putBoolean("ButtonPressed", gamePad.jstick.getRawButton((int)SmartDashboard.getNumber("buttonPort")));
     	
+	}
+	
+	private void analogTest() {
+		SmartDashboard.putNumber("analog", sensorRange.getAverageVoltage());
 	}
 }

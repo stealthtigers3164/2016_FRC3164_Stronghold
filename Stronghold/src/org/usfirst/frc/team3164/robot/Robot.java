@@ -70,10 +70,10 @@ public class Robot extends IterativeRobot {
 
     public void robotInit() {
     	//TEMP
-    	chooser = new SendableChooser();
+    	/*chooser = new SendableChooser();
         chooser.addDefault("Default Auto", defaultAuto);
         chooser.addObject("My Auto", customAuto);
-        SmartDashboard.putData("Auto choices", chooser);
+        SmartDashboard.putData("Auto choices", chooser);*/
         //END Temp
         
         
