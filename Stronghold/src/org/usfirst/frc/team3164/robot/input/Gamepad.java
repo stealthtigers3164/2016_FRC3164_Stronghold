@@ -45,18 +45,18 @@ public class Gamepad {
 	 *
 	 */
 	public class gamepadButtons {
-		public Button BUTTON_A = new Button(2);
-		public Button BUTTON_B = new Button(3);
-		public Button BUTTON_X = new Button(1);
+		public Button BUTTON_A = new Button(1);
+		public Button BUTTON_B = new Button(2);
+		public Button BUTTON_X = new Button(3);
 		public Button BUTTON_Y = new Button(4);
 		public Button BUTTON_LB = new Button(5);
 		public Button BUTTON_RB = new Button(6);
-		public Button BUTTON_LT = new Button(7);
-		public Button BUTTON_RT = new Button(8);
-		public Button BUTTON_BACK = new Button(9);
-		public Button BUTTON_START = new Button(10);
-		public Button LEFT_STICK_BUTTON = new Button(11);
-		public Button RIGHT_STICK_BUTTON = new Button(12);
+		public Button BUTTON_LT = new Button(5);
+		public Button BUTTON_RT = new Button(6);
+		public Button BUTTON_BACK = new Button(7);
+		public Button BUTTON_START = new Button(8);
+		public Button LEFT_STICK_BUTTON = new Button(9);
+		public Button RIGHT_STICK_BUTTON = new Button(10);
 	}
 	
 	/**
