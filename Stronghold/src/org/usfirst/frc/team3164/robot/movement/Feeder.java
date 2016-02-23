@@ -11,8 +11,11 @@ public class Feeder<T extends BasicMotor> extends MotorSet<T> {
 	private ArrayList<T> motors;
 	private Gamepad gamePad;
 
+	private boolean running;
+	
 	private LimitSwitch limitSwitch;
-		
+	private boolean switched;
+	
 	private int motorIndex;
 	
 	public Feeder(Gamepad Pad, T motor, final int limitSwitchPort) {
@@ -39,24 +42,38 @@ public class Feeder<T extends BasicMotor> extends MotorSet<T> {
 	}
 
 	public void updateMotors(FlyWheel wheel) {
-		if (wheel.getBallShooter().getMotor().getPower() > 0 || shouldUpdate()) {
-			updateMotors();
+		if (switched) {
+			if (wheel.getBallShooter().getMotor().getPower() > 0) {
+				shouldUpdate();
+			}
+		}
+		else {
+			if (shouldUpdate()) {
+				updateMotors();
+			}
+		}
+		
+		if (running) {
+			getMotorByIndex(motorIndex).setPower(1);
 		}
 	}
 	
 	@Override
 	public void updateMotors() {
-		if (gamePad.trigger.getLeftVal() != 0)
-			motors.get(motorIndex).setPower(gamePad.trigger.getLeftVal());
-		else if (gamePad.trigger.getRightVal() != 0)
-			motors.get(motorIndex).setPower(gamePad.trigger.getRightVal());
+		if (gamePad.buttons.BUTTON_B.isOn()) {
+			running = true;
+		}
+		else if (gamePad.buttons.BUTTON_X.isOn()) {
+			running = false;
+		}
 	}
 
 	@Override
 	public boolean shouldUpdate() {
-		if (limitSwitch.isPressed()) {
-			
+		switched = limitSwitch.isPressed();
+		if (switched) {
+			running = false;
 		}
-		return !limitSwitch.isPressed();
+		return !switched;
 	}
 }

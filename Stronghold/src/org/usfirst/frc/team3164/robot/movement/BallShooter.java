@@ -28,6 +28,10 @@ public class BallShooter {
 		this.power = power;
 	}
 	
+	public void reset() {
+		motor.setPower(0);
+	}
+	
 	public void shoot() {
 		motor.setPower(power);
 	}

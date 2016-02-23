@@ -10,8 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class FlyWheel {
 	
-	private BallShooter<SparkMotor> shooter;
-	private SparkMotor motor;
+	private BallShooter shooter;
 	private Gamepad gamePad;
 	
 	public FlyWheel(ThreadQueue<WorkerThread> Queue, Gamepad pad) {
@@ -21,7 +20,7 @@ public class FlyWheel {
         		ElectricalConfig.ball_shooter_encoder_channel_b);*/
         gamePad = pad;
         //shooter.initRPMThread(Queue);
-        motor = new SparkMotor(ElectricalConfig.ball_shooter_motor);
+        shooter = new BallShooter();
 	}
 	
 	public void update(float DistanceSensorData) {
@@ -29,11 +28,11 @@ public class FlyWheel {
     		//shoot(DistanceSensorData); 
     		//shooter.getMotor().getSpark().set(1);
     		//shooter.shoot(100);
-    		motor.setPower(1);
+    		shooter.shoot();
     		
     	}
     	else if (!gamePad.buttons.BUTTON_A.isOn()) {
-    		motor.setPower(0);
+    		shooter.reset();
     	}
     	
     	SmartDashboard.putBoolean("Shooting", gamePad.buttons.BUTTON_A.isOn());
@@ -48,7 +47,7 @@ public class FlyWheel {
 		return 0;
 	}
 	
-	public BallShooter<SparkMotor> getBallShooter() {
+	public BallShooter getBallShooter() {
 		return shooter;
 	}
 }
