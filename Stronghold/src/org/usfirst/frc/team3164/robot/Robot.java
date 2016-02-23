@@ -14,6 +14,8 @@ import org.usfirst.frc.team3164.robot.thread.WorkerThread;
 import org.usfirst.frc.team3164.robot.vision.Camera;
 import org.usfirst.frc.team3164.robot.vision.GoalAlign;
 
+import org.usfirst.frc.team3164.robot.testing.outputTesting;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -53,6 +55,8 @@ public class Robot extends IterativeRobot {
     
     private Feeder<SparkMotor> feeder;
     private Arm<SparkMotor> arm;
+    
+    private outputTesting oTesting;
     
     //private AnalogInput sensorRange;
     
@@ -126,6 +130,8 @@ public class Robot extends IterativeRobot {
         //TestCamera = new CameraServer();
         //microsoftCamera = new Camera();
         instance = this;//What does this do and why?
+        
+        oTesting = new outputTesting(gamePad1);
     }
     
 	/**
@@ -214,16 +220,12 @@ public class Robot extends IterativeRobot {
     	
     	//intake.updateMotors();
     	
-    	SmartDashboard.putString("isXbox", gamePad1.jstick.getName());
-    	SmartDashboard.putBoolean("ButtonPressed", gamePad1.jstick.getRawButton((int)SmartDashboard.getNumber("buttonPort")));
+    	
+    	this.oTesting.update();
     	
     	Watchcat.feed();
     	
-    	if(gamePad1.buttons.BUTTON_BACK.isOn()) {
-    		gamePad1.rumble.rumbleLeft(1);
-    	} else {
-    		gamePad1.rumble.stop();
-    	}
+    	
     }
     
     /**
