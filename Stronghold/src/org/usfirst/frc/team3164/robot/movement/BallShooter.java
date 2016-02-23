@@ -1,18 +1,39 @@
 package org.usfirst.frc.team3164.robot.movement;
 
-import java.util.concurrent.locks.ReentrantLock;
+import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
+import org.usfirst.frc.team3164.robot.electrical.motor.SparkMotor;
 
-import org.usfirst.frc.team3164.robot.electrical.motor.BasicMotor;
-import org.usfirst.frc.team3164.robot.thread.ThreadMethod;
-import org.usfirst.frc.team3164.robot.thread.ThreadQueue;
-import org.usfirst.frc.team3164.robot.thread.WorkerThread;
-
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class BallShooter<T extends BasicMotor> {
+public class BallShooter {
+	private SparkMotor motor;
 	
-	private WorkerThread workerThread;
+	private double power;
+	
+	public BallShooter() {
+		motor = new SparkMotor(ElectricalConfig.ball_shooter_motor);
+		setPower(1);
+	}
+	
+	public SparkMotor getMotor() {
+		return motor;
+	}
+	
+	public void update() {
+		power = SmartDashboard.getNumber("Ballshooter Power");
+	}
+
+	public void setPower(double power) {
+		SmartDashboard.putNumber("Ballshooter Power", power);
+		this.power = power;
+	}
+	
+	public void shoot() {
+		motor.setPower(power);
+	}
+}
+
+/*private WorkerThread workerThread;
 	private boolean shooterStarted;
 	
 	private T motor;
@@ -96,5 +117,4 @@ public class BallShooter<T extends BasicMotor> {
 		SmartDashboard.putNumber("Distance from target", distance);
 		int calculatedRPM = (int) distance;
 		wantedRPMSpeed = calculatedRPM;
-	}
-}
+	}*/
