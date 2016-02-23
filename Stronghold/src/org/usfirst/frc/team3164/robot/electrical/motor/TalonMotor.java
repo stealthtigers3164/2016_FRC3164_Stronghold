@@ -33,9 +33,9 @@ public class TalonMotor implements BasicMotor {
     
     /**
      * Please Please Please Please don't mess with this unless you MUST! D:
-     * @return The Jaguar controller
+     * @return The Talon controller
      */
-    public Jaguar getJag() {
+    public Talon getTalon() {
     	return m;
     }
     
