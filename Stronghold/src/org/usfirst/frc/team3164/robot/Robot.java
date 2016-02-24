@@ -4,9 +4,9 @@ package org.usfirst.frc.team3164.robot;
 import org.usfirst.frc.team3164.robot.comms.Watchcat;
 import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
 import org.usfirst.frc.team3164.robot.electrical.LimitSwitch;
-import org.usfirst.frc.team3164.robot.electrical.motor.Arm;
 import org.usfirst.frc.team3164.robot.electrical.motor.SparkMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
+import org.usfirst.frc.team3164.robot.movement.Arm;
 import org.usfirst.frc.team3164.robot.movement.DriveTrain;
 import org.usfirst.frc.team3164.robot.movement.FlyWheel;
 import org.usfirst.frc.team3164.robot.movement.Feeder;
@@ -30,14 +30,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {	
-    public static Robot instance;//Has this always been there????
-	/*
-     * NOTE: TEMP
-     */
-	private final String defaultAuto = "Default";
-    private final String customAuto = "My Auto";
-    private String autoSelected;
-    private SendableChooser chooser;
 
     private final String driveTank = "Tank Drive";
     private final String driveForza = "Forza Drive";
@@ -54,8 +46,8 @@ public class Robot extends IterativeRobot {
     
     private ThreadQueue<WorkerThread> queue;
     
-    private Feeder<SparkMotor> feeder;
     private Arm<SparkMotor> arm;
+    private Feeder<SparkMotor> feeder;
     private LimitSwitch limitSwitch;
     
     private outputTesting oTesting;
@@ -89,10 +81,10 @@ public class Robot extends IterativeRobot {
         
         //////////////		Drivetrain		//////////////
         drive = new DriveTrain<SparkMotor>(
-        			new SparkMotor(ElectricalConfig.wheel_frontLeft_pwm, ElectricalConfig.wheel_frontLeft_rev),
-        			new SparkMotor(ElectricalConfig.wheel_frontRight_pwm, ElectricalConfig.wheel_frontRight_rev),
-        			new SparkMotor(ElectricalConfig.wheel_backLeft_pwm, ElectricalConfig.wheel_backLeft_rev),
-        			new SparkMotor(ElectricalConfig.wheel_backRight_pwm, ElectricalConfig.wheel_backRight_rev),
+        			new SparkMotor(ElectricalConfig.wheel_frontLeft_motor, ElectricalConfig.wheel_frontLeft_rev),
+        			new SparkMotor(ElectricalConfig.wheel_frontRight_motor, ElectricalConfig.wheel_frontRight_rev),
+        			new SparkMotor(ElectricalConfig.wheel_backLeft_motor, ElectricalConfig.wheel_backLeft_rev),
+        			new SparkMotor(ElectricalConfig.wheel_backRight_motor, ElectricalConfig.wheel_backRight_rev),
         			gamePad1);
         drive.setScaleFactor(0.7);//Overridden by smart dashboard
         
@@ -117,6 +109,9 @@ public class Robot extends IterativeRobot {
         
         shooter = new FlyWheel(queue, gamePad2);
         
+        arm = new Arm<SparkMotor>(gamePad2, new SparkMotor(ElectricalConfig.arm_motor),
+        		new SparkMotor(ElectricalConfig.intake_motor));
+        
         //////////////		Sensors		//////////////
         //sensorRange = new AnalogInput(electricalConfig.analog_ultrasonic_port);
         
@@ -130,10 +125,6 @@ public class Robot extends IterativeRobot {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-        camera = new Camera();
-        //TestCamera = new CameraServer();
-        //microsoftCamera = new Camera();
-        instance = this;//What does this do and why?
         
         oTesting = new outputTesting(gamePad1);
     }
@@ -189,12 +180,7 @@ public class Robot extends IterativeRobot {
     	
     	//Testing
     	//SmartDashboard.putBoolean("ImageTest", CameraServer.getInstance().isAutoCaptureStarted());
-    	//SmartDashboard.putNumber("analog", sensorRange.getAverageVoltage());
-    	
-    	autoSelected = (String) chooser.getSelected();
-//		autoSelected = SmartDashboard.getString("Auto Selector", defaultAuto);
-		System.out.println("Auto selected: " + autoSelected);
-    	
+    	//SmartDashboard.putNumber("analog", sensorRange.getAverageVoltage());    	
     	
     	//Remove switch for comp, wastes cycles
     	switch(driveSelected) {
@@ -217,13 +203,11 @@ public class Robot extends IterativeRobot {
 	            break;
     	}
     	
-    	//feeder.updateMotors(shooter);
+    	feeder.updateMotors(shooter);
+    	//arm.updateMotors();
     	shooter.update(0);	
     	
     	drive.updateMotors();
-    	
-    	//intake.updateMotors();
-    	
     	
     	this.oTesting.update();
     	
