@@ -2,6 +2,7 @@ package org.usfirst.frc.team3164.robot.testing;
 
 import org.usfirst.frc.team3164.robot.input.Gamepad;
 import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
+import org.usfirst.frc.team3164.robot.electrical.LimitSwitch;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class outputTesting {
 	private Gamepad gamePad;
 	private AnalogInput sensorRange;
+	private LimitSwitch limitSwitch;
 	
 	public outputTesting(Gamepad Pad) {
 		gamePad = Pad;
@@ -19,7 +21,7 @@ public class outputTesting {
 		
 		gamepadTest();
 		analogTest();
-		
+		limitSwitchTest();
 		
 		
 	}
@@ -37,5 +39,9 @@ public class outputTesting {
 	
 	private void analogTest() {
 		SmartDashboard.putNumber("analog", sensorRange.getAverageVoltage());
+	}
+	
+	private void limitSwitchTest() {
+		SmartDashboard.putBoolean("Limit Switch Pressed", limitSwitch.isPressed());
 	}
 }

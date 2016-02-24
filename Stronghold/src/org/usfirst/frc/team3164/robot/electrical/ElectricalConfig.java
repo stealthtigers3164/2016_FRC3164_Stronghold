@@ -24,5 +24,5 @@ public class ElectricalConfig {
 	public static final int arm_pwn = 6;
 	
 	public static final int feeder_motor = 4;//7
-	public static final int feeder_limit_switch = 10;
+	public static final int feeder_limit_switch = 0;
 }

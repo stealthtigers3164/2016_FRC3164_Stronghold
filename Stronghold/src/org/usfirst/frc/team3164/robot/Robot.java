@@ -3,6 +3,7 @@ package org.usfirst.frc.team3164.robot;
 
 import org.usfirst.frc.team3164.robot.comms.Watchcat;
 import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
+import org.usfirst.frc.team3164.robot.electrical.LimitSwitch;
 import org.usfirst.frc.team3164.robot.electrical.motor.Arm;
 import org.usfirst.frc.team3164.robot.electrical.motor.SparkMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
@@ -55,6 +56,7 @@ public class Robot extends IterativeRobot {
     
     private Feeder<SparkMotor> feeder;
     private Arm<SparkMotor> arm;
+    private LimitSwitch limitSwitch;
     
     private outputTesting oTesting;
     
@@ -79,6 +81,8 @@ public class Robot extends IterativeRobot {
         
         Watchcat.init();//Not sure if should go here
         
+        limitSwitch = new LimitSwitch(ElectricalConfig.feeder_limit_switch);
+        
         //////////////		Gamepad		//////////////
         gamePad1 = new Gamepad(0);
         gamePad2 = new Gamepad(1);
@@ -93,7 +97,7 @@ public class Robot extends IterativeRobot {
         drive.setScaleFactor(0.7);//Overridden by smart dashboard
         
         feeder = new Feeder<SparkMotor>(gamePad2,
-        		new  SparkMotor(ElectricalConfig.feeder_motor), ElectricalConfig.feeder_limit_switch);
+        		new  SparkMotor(ElectricalConfig.feeder_motor), limitSwitch);
         //arm = new Arm<SparkMotor>(gamePad2, new SparkMotor(ElectricalConfig.arm_pwn));
         
         gamePad1.sticks.setDeadzones();

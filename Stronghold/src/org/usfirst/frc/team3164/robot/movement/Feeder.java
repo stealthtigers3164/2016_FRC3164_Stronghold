@@ -18,11 +18,11 @@ public class Feeder<T extends BasicMotor> extends MotorSet<T> {
 	
 	private int motorIndex;
 	
-	public Feeder(Gamepad Pad, T motor, final int limitSwitchPort) {
+	public Feeder(Gamepad Pad, T motor, final LimitSwitch limitSwitchPass) {
 		gamePad = Pad;
 		motors = new ArrayList<T>();
 		motorIndex = addMotor(motor);
-		limitSwitch = new LimitSwitch(limitSwitchPort);
+		limitSwitch = limitSwitchPass;
 	}
 
 	@Override
