@@ -6,16 +6,14 @@ import org.usfirst.frc.team3164.robot.electrical.motor.BasicMotor;
 import org.usfirst.frc.team3164.robot.electrical.motor.MotorSet;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-public class Arm<T extends BasicMotor> extends MotorSet<T> {
+public class Intake<T extends BasicMotor> extends MotorSet<T> {
 	private ArrayList<T> motors;
-	private Gamepad pad;
 	
 	private int motorIndex;
 	
-	public Arm(Gamepad Pad, T Motor) {
-		motors = new ArrayList<T>();
+	private Gamepad pad;
+	
+	public Intake(T Motor, Gamepad Pad) {
 		pad = Pad;
 		motorIndex = addMotor(Motor);
 	}
@@ -32,24 +30,20 @@ public class Arm<T extends BasicMotor> extends MotorSet<T> {
 
 	@Override
 	public int addMotor(T Motor) {
-		if (motors.add(Motor)) 
-			return motors.size() - 1;
-		else
-			return -1;
+		motors.add(Motor);
+		return motors.size() - 1;
 	}
 
 	@Override
 	public void updateMotors() {
 		if (shouldUpdate()) {
-			SmartDashboard.putNumber("Gamepad2 Right stick data", pad.sticks.RIGHT_Y.getRaw());
-			getMotorByIndex(motorIndex).setPower(pad.sticks.RIGHT_Y.getRaw());
-			//getMotorByIndex(motorIndex).setPower(pad.trigger.getLeftVal());
+			getMotorByIndex(motorIndex).setPower(1);
 		}
 	}
 
 	@Override
 	public boolean shouldUpdate() {
-		return true;
+		return pad.buttons.BUTTON_A.isOn();
 	}
 
 }

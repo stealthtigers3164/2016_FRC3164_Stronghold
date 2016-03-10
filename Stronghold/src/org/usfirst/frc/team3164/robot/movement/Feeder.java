@@ -7,6 +7,8 @@ import org.usfirst.frc.team3164.robot.electrical.motor.BasicMotor;
 import org.usfirst.frc.team3164.robot.electrical.motor.MotorSet;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Feeder<T extends BasicMotor> extends MotorSet<T> {
 	private ArrayList<T> motors;
 	private Gamepad gamePad;
@@ -18,11 +20,11 @@ public class Feeder<T extends BasicMotor> extends MotorSet<T> {
 	
 	private int motorIndex;
 	
-	public Feeder(Gamepad Pad, T motor, final LimitSwitch limitSwitchPass) {
+	public Feeder(Gamepad Pad, T motor, int limitSwitchPort) {
 		gamePad = Pad;
 		motors = new ArrayList<T>();
 		motorIndex = addMotor(motor);
-		limitSwitch = limitSwitchPass;
+		limitSwitch = new LimitSwitch(limitSwitchPort);
 	}
 
 	@Override
@@ -66,6 +68,7 @@ public class Feeder<T extends BasicMotor> extends MotorSet<T> {
 		else if (gamePad.buttons.BUTTON_X.isOn()) {
 			running = false;
 		}
+		SmartDashboard.putBoolean("Feeder Limit Switch", limitSwitch.isPressed());
 	}
 
 	@Override

@@ -3,20 +3,17 @@ package org.usfirst.frc.team3164.robot;
 
 import org.usfirst.frc.team3164.robot.comms.Watchcat;
 import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
-import org.usfirst.frc.team3164.robot.electrical.LimitSwitch;
-import org.usfirst.frc.team3164.robot.electrical.motor.JaguarMotor;
 import org.usfirst.frc.team3164.robot.electrical.motor.SparkMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
 import org.usfirst.frc.team3164.robot.movement.Arm;
 import org.usfirst.frc.team3164.robot.movement.DriveTrain;
-import org.usfirst.frc.team3164.robot.movement.FlyWheel;
 import org.usfirst.frc.team3164.robot.movement.Feeder;
+import org.usfirst.frc.team3164.robot.movement.FlyWheel;
+import org.usfirst.frc.team3164.robot.movement.Intake;
 import org.usfirst.frc.team3164.robot.thread.ThreadQueue;
 import org.usfirst.frc.team3164.robot.thread.WorkerThread;
 import org.usfirst.frc.team3164.robot.vision.Camera;
 import org.usfirst.frc.team3164.robot.vision.GoalAlign;
-
-import org.usfirst.frc.team3164.robot.testing.outputTesting;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -40,20 +37,18 @@ public class Robot extends IterativeRobot {
 
     private FlyWheel shooter;
     
-    private DriveTrain<JaguarMotor> drive;
+    private DriveTrain<SparkMotor> drive;
     private Gamepad gamePad1;
     private Gamepad gamePad2;
     private Camera camera;
     
     private ThreadQueue<WorkerThread> queue;
     
-    private Arm<JaguarMotor> arm;
-    private Feeder<JaguarMotor> feeder;
-    private LimitSwitch limitSwitch;
+    private Arm<SparkMotor> arm;
+    private Feeder<SparkMotor> feeder;
+    private Intake<SparkMotor> intake;
     
-    //private AnalogInput sensorRange;
-    
-    //private Camera microsoftCamera;
+    private GoalAlign alignment;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -72,23 +67,21 @@ public class Robot extends IterativeRobot {
         
         Watchcat.init();//Not sure if should go here
         
-        limitSwitch = new LimitSwitch(ElectricalConfig.feeder_limit_switch);
-        
         //////////////		Gamepad		//////////////
         gamePad1 = new Gamepad(0);
         gamePad2 = new Gamepad(1);
         
         //////////////		Drivetrain		//////////////
-        drive = new DriveTrain<JaguarMotor>(
-        			new JaguarMotor(ElectricalConfig.wheel_frontLeft_motor, ElectricalConfig.wheel_frontLeft_rev),
-        			new JaguarMotor(ElectricalConfig.wheel_frontRight_motor, ElectricalConfig.wheel_frontRight_rev),
-        			new JaguarMotor(ElectricalConfig.wheel_backLeft_motor, ElectricalConfig.wheel_backLeft_rev),
-        			new JaguarMotor(ElectricalConfig.wheel_backRight_motor, ElectricalConfig.wheel_backRight_rev),
+        drive = new DriveTrain<SparkMotor>(
+        			new SparkMotor(ElectricalConfig.wheel_frontLeft_motor, ElectricalConfig.wheel_frontLeft_rev),
+        			new SparkMotor(ElectricalConfig.wheel_frontRight_motor, ElectricalConfig.wheel_frontRight_rev),
+        			new SparkMotor(ElectricalConfig.wheel_backLeft_motor, ElectricalConfig.wheel_backLeft_rev),
+        			new SparkMotor(ElectricalConfig.wheel_backRight_motor, ElectricalConfig.wheel_backRight_rev),
         			gamePad1);
         drive.setScaleFactor(0.7);//Overridden by smart dashboard
         
-        feeder = new Feeder<JaguarMotor>(gamePad2,
-        		new  JaguarMotor(ElectricalConfig.feeder_motor), limitSwitch);
+        feeder = new Feeder<SparkMotor>(gamePad2,
+        		new  SparkMotor(ElectricalConfig.feeder_motor), ElectricalConfig.feeder_limit_switch);
         //arm = new Arm<SparkMotor>(gamePad2, new SparkMotor(ElectricalConfig.arm_pwn));
         
         gamePad1.sticks.setDeadzones();
@@ -108,8 +101,11 @@ public class Robot extends IterativeRobot {
         
         shooter = new FlyWheel(queue, gamePad2);
         
-        arm = new Arm<JaguarMotor>(gamePad2, new JaguarMotor(ElectricalConfig.arm_motor),
-        		new JaguarMotor(ElectricalConfig.intake_motor));
+        arm = new Arm<SparkMotor>(gamePad2, new SparkMotor(ElectricalConfig.arm_motor));
+        
+        intake = new Intake<SparkMotor>(new SparkMotor(ElectricalConfig.intake_motor), gamePad2);
+    
+        alignment = new GoalAlign("GoalContours");
         
         //////////////		Sensors		//////////////
         //sensorRange = new AnalogInput(electricalConfig.analog_ultrasonic_port);
@@ -139,10 +135,6 @@ public class Robot extends IterativeRobot {
     	
     }
 
-    /**
-     * This function is called periodically during autonomous
-     */
-    GoalAlign testGoal = new GoalAlign("GoalContours");
     public void autonomousPeriodic() {
     	//for (double area : grip.getNumberArray("GoalContours/area", new double[0])) {
            // System.out.println("Got contour with area=" + area);
@@ -156,8 +148,8 @@ public class Robot extends IterativeRobot {
     	//Put default auto code here
             break;
     	}*/
-    	testGoal.updateByLargestArea();
-    	SmartDashboard.putNumber("DistanceXfromCenter", testGoal.getHorizontalDistanceFromCenter());
+    	//testGoal.updateByLargestArea();
+    	//SmartDashboard.putNumber("DistanceXfromCenter", testGoal.getHorizontalDistanceFromCenter());
     	
     }
     
@@ -200,15 +192,20 @@ public class Robot extends IterativeRobot {
 	            break;
     	}
     	
+    	
     	feeder.updateMotors(shooter);
     	//arm.updateMotors();
     	shooter.update(0);	
+    	
+    	arm.updateMotors();
+    	
+    	intake.updateMotors();
     	
     	drive.updateMotors();
     	
     	Watchcat.feed();
     	
-    	testGoal.update(drive);
+    	alignment.update(drive);
     }
     
     /**
