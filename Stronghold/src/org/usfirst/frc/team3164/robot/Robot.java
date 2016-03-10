@@ -89,8 +89,8 @@ public class Robot extends IterativeRobot {
 
         //////////////		Driving		//////////////				DONT KEEP FOR COMP
         chooserDT = new SendableChooser();
-        chooserDT.addDefault("Tank Drive", driveTank);
-        chooserDT.addObject("Forza Drive", driveForza);
+        chooserDT.addDefault("Forza Drive", driveForza);
+        chooserDT.addObject("Tank Drive", driveTank);
         chooserDT.addObject("No Drive", driveNone);
         SmartDashboard.putData("Drivetrain", chooserDT);
 

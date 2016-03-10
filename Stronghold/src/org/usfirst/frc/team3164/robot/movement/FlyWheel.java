@@ -1,10 +1,9 @@
 package org.usfirst.frc.team3164.robot.movement;
 
-import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
-import org.usfirst.frc.team3164.robot.electrical.motor.SparkMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
 import org.usfirst.frc.team3164.robot.thread.ThreadQueue;
 import org.usfirst.frc.team3164.robot.thread.WorkerThread;
+import org.usfirst.frc.team3164.robot.vision.GoalAlign;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -23,7 +22,7 @@ public class FlyWheel {
         shooter = new BallShooter();
 	}
 	
-	public void update(float DistanceSensorData) {
+	public void update(GoalAlign alignment) {
     	if (gamePad.buttons.BUTTON_A.isOn()) {
     		//shoot(DistanceSensorData); 
     		//shooter.getMotor().getSpark().set(1);
@@ -49,5 +48,9 @@ public class FlyWheel {
 	
 	public BallShooter getBallShooter() {
 		return shooter;
+	}
+	
+	public double getDistFromBottom(double hy, double y, double rectangleHeight) {
+		return hy - y - rectangleHeight;
 	}
 }
