@@ -4,6 +4,7 @@ package org.usfirst.frc.team3164.robot;
 import org.usfirst.frc.team3164.robot.comms.Watchcat;
 import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
 import org.usfirst.frc.team3164.robot.electrical.LimitSwitch;
+import org.usfirst.frc.team3164.robot.electrical.motor.JaguarMotor;
 import org.usfirst.frc.team3164.robot.electrical.motor.SparkMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
 import org.usfirst.frc.team3164.robot.movement.Arm;
@@ -39,18 +40,16 @@ public class Robot extends IterativeRobot {
 
     private FlyWheel shooter;
     
-    private DriveTrain<SparkMotor> drive;
+    private DriveTrain<JaguarMotor> drive;
     private Gamepad gamePad1;
     private Gamepad gamePad2;
     private Camera camera;
     
     private ThreadQueue<WorkerThread> queue;
     
-    private Arm<SparkMotor> arm;
-    private Feeder<SparkMotor> feeder;
+    private Arm<JaguarMotor> arm;
+    private Feeder<JaguarMotor> feeder;
     private LimitSwitch limitSwitch;
-    
-    private outputTesting oTesting;
     
     //private AnalogInput sensorRange;
     
@@ -80,16 +79,16 @@ public class Robot extends IterativeRobot {
         gamePad2 = new Gamepad(1);
         
         //////////////		Drivetrain		//////////////
-        drive = new DriveTrain<SparkMotor>(
-        			new SparkMotor(ElectricalConfig.wheel_frontLeft_motor, ElectricalConfig.wheel_frontLeft_rev),
-        			new SparkMotor(ElectricalConfig.wheel_frontRight_motor, ElectricalConfig.wheel_frontRight_rev),
-        			new SparkMotor(ElectricalConfig.wheel_backLeft_motor, ElectricalConfig.wheel_backLeft_rev),
-        			new SparkMotor(ElectricalConfig.wheel_backRight_motor, ElectricalConfig.wheel_backRight_rev),
+        drive = new DriveTrain<JaguarMotor>(
+        			new JaguarMotor(ElectricalConfig.wheel_frontLeft_motor, ElectricalConfig.wheel_frontLeft_rev),
+        			new JaguarMotor(ElectricalConfig.wheel_frontRight_motor, ElectricalConfig.wheel_frontRight_rev),
+        			new JaguarMotor(ElectricalConfig.wheel_backLeft_motor, ElectricalConfig.wheel_backLeft_rev),
+        			new JaguarMotor(ElectricalConfig.wheel_backRight_motor, ElectricalConfig.wheel_backRight_rev),
         			gamePad1);
         drive.setScaleFactor(0.7);//Overridden by smart dashboard
         
-        feeder = new Feeder<SparkMotor>(gamePad2,
-        		new  SparkMotor(ElectricalConfig.feeder_motor), limitSwitch);
+        feeder = new Feeder<JaguarMotor>(gamePad2,
+        		new  JaguarMotor(ElectricalConfig.feeder_motor), limitSwitch);
         //arm = new Arm<SparkMotor>(gamePad2, new SparkMotor(ElectricalConfig.arm_pwn));
         
         gamePad1.sticks.setDeadzones();
@@ -109,8 +108,8 @@ public class Robot extends IterativeRobot {
         
         shooter = new FlyWheel(queue, gamePad2);
         
-        arm = new Arm<SparkMotor>(gamePad2, new SparkMotor(ElectricalConfig.arm_motor),
-        		new SparkMotor(ElectricalConfig.intake_motor));
+        arm = new Arm<JaguarMotor>(gamePad2, new JaguarMotor(ElectricalConfig.arm_motor),
+        		new JaguarMotor(ElectricalConfig.intake_motor));
         
         //////////////		Sensors		//////////////
         //sensorRange = new AnalogInput(electricalConfig.analog_ultrasonic_port);
@@ -125,8 +124,6 @@ public class Robot extends IterativeRobot {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-        
-        oTesting = new outputTesting(gamePad1);
     }
     
 	/**
@@ -209,11 +206,9 @@ public class Robot extends IterativeRobot {
     	
     	drive.updateMotors();
     	
-    	this.oTesting.update();
-    	
     	Watchcat.feed();
     	
-    	
+    	testGoal.update(drive);
     }
     
     /**

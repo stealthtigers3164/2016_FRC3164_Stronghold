@@ -2,6 +2,9 @@ package org.usfirst.frc.team3164.robot.vision;
 
 import java.util.Date;
 
+import org.usfirst.frc.team3164.robot.electrical.motor.BasicMotor;
+import org.usfirst.frc.team3164.robot.movement.DriveTrain;
+
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -22,19 +25,36 @@ public class GoalAlign {
 	private long lastUpdate;
 	private int timeout = 300;//Might need to change
 	
+	private boolean update = false;
+	
 	public GoalAlign(String ContourReportName) {
 		this.reportName = ContourReportName;// GoalContours i think
 		this.lastUpdate = new Date().getTime();
 		
 	}
 
+	public <T extends BasicMotor> void update(DriveTrain<T> drive)
+	{
+		updateByLargestArea();
+		
+		SmartDashboard.putBoolean("TurningLeft", update && centerX > 0 ? (centerX < imageWidth / 2) : false);
+		SmartDashboard.putBoolean("TurningRight", update && centerX > 0 ? (centerX > imageWidth / 2) : false);
+		
+		if (SmartDashboard.getBoolean("TurningLeft"))
+			drive.setLeftPower(1);
+		
+		if (SmartDashboard.getBoolean("TurningRight"))
+			drive.setRightPower(1);
+	}
+	
 	public void updateByLargestArea() {
 
 		
 		try {
 			double[] arrayArea = grip.getNumberArray(reportName + "/area", new double[0]);///?*******New Double might need to be taken out.
 			SmartDashboard.putNumber("ARRAY LENGTH", arrayArea.length);
-			if (arrayArea.length > 0f) {
+			if (arrayArea.length > 0) {
+				update = true;
 				int largestIndex = 0;
 				for (int i = 0; i < arrayArea.length; i++) {
 					if (arrayArea[i] > arrayArea[largestIndex])
@@ -53,7 +73,7 @@ public class GoalAlign {
 					//Not tested, supposed to make sure it doesnt disappear for a split second.
 					this.zeroVariables();
 				}
-				
+				update = false;
 			
 			}
 		} catch (Exception ex) {
