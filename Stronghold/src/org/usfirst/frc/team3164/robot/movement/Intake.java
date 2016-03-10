@@ -14,6 +14,7 @@ public class Intake<T extends BasicMotor> extends MotorSet<T> {
 	private Gamepad pad;
 	
 	public Intake(T Motor, Gamepad Pad) {
+		motors = new ArrayList<T>();
 		pad = Pad;
 		motorIndex = addMotor(Motor);
 	}

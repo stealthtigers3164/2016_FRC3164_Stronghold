@@ -217,7 +217,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void testPeriodic() {
-    	camera.Update();
+    	
     }
     
 }
