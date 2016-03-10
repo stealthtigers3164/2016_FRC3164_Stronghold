@@ -195,7 +195,7 @@ public class Robot extends IterativeRobot {
     	
     	feeder.updateMotors(shooter);
     	//arm.updateMotors();
-    	shooter.update(0);	
+    	shooter.update(alignment);	
     	
     	arm.updateMotors();
     	

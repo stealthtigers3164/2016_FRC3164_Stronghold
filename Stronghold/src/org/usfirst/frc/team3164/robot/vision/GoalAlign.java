@@ -19,8 +19,8 @@ public class GoalAlign {
 	public double height;
 	public double solidity;
 
-	private double imageHeight = 240;
-	private double imageWidth = 320;
+	public double imageHeight = 240;
+	public double imageWidth = 320;
 	
 	private long lastUpdate;
 	private int timeout = 300;//Might need to change

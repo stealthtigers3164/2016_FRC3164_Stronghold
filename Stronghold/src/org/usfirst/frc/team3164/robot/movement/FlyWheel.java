@@ -23,10 +23,11 @@ public class FlyWheel {
 	}
 	
 	public void update(GoalAlign alignment) {
-    	if (gamePad.buttons.BUTTON_A.isOn()) {
+    	if (gamePad.buttons.BUTTON_A.isOn() && alignment.centerY > 0) {
     		//shoot(DistanceSensorData); 
     		//shooter.getMotor().getSpark().set(1);
     		//shooter.shoot(100);
+    		shooter.setPower(getPowerFromDistance(alignment.imageHeight, alignment.centerY, alignment.height));
     		shooter.shoot();
     		
     	}
@@ -50,7 +51,13 @@ public class FlyWheel {
 		return shooter;
 	}
 	
+	public double getPowerFromDistance(double hy, double y, double rectangleHeight) {
+		double distance = getPowerFromDistance(hy, y, rectangleHeight);
+		SmartDashboard.putNumber("Distance from bottom of rectangle grip picture", distance);
+		return 1;
+	}
+	
 	public double getDistFromBottom(double hy, double y, double rectangleHeight) {
-		return hy - y - rectangleHeight;
+		return hy - y - (rectangleHeight / 2);
 	}
 }
