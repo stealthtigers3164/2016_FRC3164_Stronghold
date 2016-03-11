@@ -54,6 +54,11 @@ public class Robot extends IterativeRobot {
     
     private GoalAlign alignment;
     
+	SmartDashboard.putString("Auto", "Robot Init");
+	SmartDashboard.putNumber("Auto Forward Seconds", 2);
+    
+    
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -149,10 +154,19 @@ public class Robot extends IterativeRobot {
 	 * If using the SendableChooser make sure to add them to the chooser code above as well.
 	 */
     public void autonomousInit() {
-    	
+    	SmartDashboard.putString("Auto", "Started");
+    	auto_Finish = System.currentTimeMillis() + (SmartDashboard.getNumber("Auto Forward Seconds") * 1000);
     }
 
+    private double auto_Finish;
     public void autonomousPeriodic() {
+    	if(auto_Finish >= System.currentTimeMillis()) {
+    		drive.setLeftPower(0.5);
+    		drive.setRightPower(0.5);
+    	} else {
+    		drive.setLeftPower(0);
+    		drive.setRightPower(0);
+    	}
     	//for (double area : grip.getNumberArray("GoalContours/area", new double[0])) {
            // System.out.println("Got contour with area=" + area);
         //}
