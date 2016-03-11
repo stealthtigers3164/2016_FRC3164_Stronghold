@@ -9,8 +9,8 @@ public class ElectricalConfig {
 	public static final int lift_front_motor       = 4; //Practice Bot: 4//Real Bot: 4
 	public static final int lift_back_motor        = 5;	//Practice Bot: 5//Real Bot: 5
 	public static final int feeder_motor           = 6; //Practice Bot: 6//Real Bot: 6
-	public static final int ball_shooter_motor     = 7; //Practice Bot: 7//Real Bot: 7
-	public static final int arm_motor              = 8; //Practice Bot: 8//Real Bot: 8
+	public static final int ball_shooter_motor     = 8; //Practice Bot: 7//Real Bot: 7
+	public static final int arm_motor              = 7; //Practice Bot: 8//Real Bot: 8
 	public static final int intake_motor           = 9; //Practice Bot: 9//Real Bot: 9
 	
 	//Analog

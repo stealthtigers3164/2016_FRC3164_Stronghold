@@ -84,8 +84,10 @@ public class Robot extends IterativeRobot {
         			gamePad1);
         drive.setScaleFactor(0.7);//Overridden by smart dashboard
         
-        //feeder = new Feeder<SparkMotor>(gamePad2,
-        //		new  SparkMotor(ElectricalConfig.feeder_motor), ElectricalConfig.feeder_limit_switch);
+        feeder = new Feeder<SparkMotor>(gamePad2,
+                		new  SparkMotor(ElectricalConfig.feeder_motor), ElectricalConfig.feeder_limit_switch);
+        
+        //
         //arm = new Arm<SparkMotor>(gamePad2, new SparkMotor(ElectricalConfig.arm_pwn));
         
         //lin = new LimitSwitch(1);
@@ -100,20 +102,20 @@ public class Robot extends IterativeRobot {
         chooserDT.addObject("No Drive", driveNone);
         SmartDashboard.putData("Drivetrain", chooserDT);
 
-        SmartDashboard.putNumber("Driving Scale Factor", 0.7);
-        SmartDashboard.putNumber("Turning Scale Factor", 0.5);
+        SmartDashboard.putNumber("Driving Scale Factor", 1);
+        SmartDashboard.putNumber("Turning Scale Factor", 1);
         
         queue = new ThreadQueue<WorkerThread>();
         
-        arm = new Arm<SparkMotor>(gamePad2, new SparkMotor(ElectricalConfig.arm_motor));
+        //arm = new Arm<SparkMotor>(gamePad2, new SparkMotor(ElectricalConfig.arm_motor));
         
-        /*
         shooter = new FlyWheel(queue, gamePad2);
         
+        //intake = new Intake<SparkMotor>(new SparkMotor(ElectricalConfig.intake_motor), gamePad2);
+        
+        /*
         
         
-        intake = new Intake<SparkMotor>(new SparkMotor(ElectricalConfig.intake_motor), gamePad2);
-    
         alignment = new GoalAlign("GoalContours");
         */
         //////////////		Sensors		//////////////
@@ -217,7 +219,10 @@ public class Robot extends IterativeRobot {
     	alignment.update(drive);*/
     	//lin.isPressed();
     	drive.updateMotors();
-    	arm.updateMotors();
+    	shooter.update(alignment);
+    	//shooter.getBallShooter().setPower(1);
+    	feeder.updateMotors();
+    	//arm.updateMotors();
     }
     
     /**

@@ -1,5 +1,7 @@
 package org.usfirst.frc.team3164.robot.movement;
 
+import org.usfirst.frc.team3164.robot.electrical.ElectricalConfig;
+import org.usfirst.frc.team3164.robot.electrical.motor.SparkMotor;
 import org.usfirst.frc.team3164.robot.input.Gamepad;
 import org.usfirst.frc.team3164.robot.thread.ThreadQueue;
 import org.usfirst.frc.team3164.robot.thread.WorkerThread;
@@ -9,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class FlyWheel {
 	
-	private BallShooter shooter;
+	private SparkMotor shooter;
 	private Gamepad gamePad;
 	
 	public FlyWheel(ThreadQueue<WorkerThread> Queue, Gamepad pad) {
@@ -19,20 +21,20 @@ public class FlyWheel {
         		ElectricalConfig.ball_shooter_encoder_channel_b);*/
         gamePad = pad;
         //shooter.initRPMThread(Queue);
-        shooter = new BallShooter();
+        shooter = new SparkMotor(ElectricalConfig.ball_shooter_motor);
 	}
 	
 	public void update(GoalAlign alignment) {
-    	if (gamePad.buttons.BUTTON_A.isOn() && alignment.centerY > 0) {
+    	if (gamePad.buttons.BUTTON_A.isOn()) {
     		//shoot(DistanceSensorData); 
     		//shooter.getMotor().getSpark().set(1);
     		//shooter.shoot(100);
-    		shooter.setPower(getPowerFromDistance(alignment.imageHeight, alignment.centerY, alignment.height));
-    		shooter.shoot();
+    		//shooter.setPower(getPowerFromDistance(alignment.imageHeight, alignment.centerY, alignment.height));
+    		shooter.setPower(1);
     		
     	}
     	else if (!gamePad.buttons.BUTTON_A.isOn()) {
-    		shooter.reset();
+    		shooter.setPower(0);
     	}
     	
     	SmartDashboard.putBoolean("Shooting", gamePad.buttons.BUTTON_A.isOn());
@@ -47,7 +49,7 @@ public class FlyWheel {
 		return 0;
 	}
 	
-	public BallShooter getBallShooter() {
+	public SparkMotor getBallShooter() {
 		return shooter;
 	}
 	

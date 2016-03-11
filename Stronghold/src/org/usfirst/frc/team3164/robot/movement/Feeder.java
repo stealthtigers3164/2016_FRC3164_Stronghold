@@ -45,7 +45,7 @@ public class Feeder<T extends BasicMotor> extends MotorSet<T> {
 
 	public void updateMotors(FlyWheel wheel) {
 		if (switched) {
-			if (wheel.getBallShooter().getMotor().getPower() > 0) {
+			if (wheel.getBallShooter().getPower() > 0) {
 				shouldUpdate();
 			}
 		}
@@ -66,7 +66,13 @@ public class Feeder<T extends BasicMotor> extends MotorSet<T> {
 			running = true;
 			getMotorByIndex(motorIndex).setPower(1);
 		}
-		else {
+		
+		if (gamePad.buttons.BUTTON_X.isOn()) {
+			running = true;
+			getMotorByIndex(motorIndex).setPower(-1);
+		}
+		
+		if (gamePad.buttons.BUTTON_B.isOn() && gamePad.buttons.BUTTON_X.isOn()){
 			getMotorByIndex(motorIndex).setPower(0);
 			running = false;
 		}
