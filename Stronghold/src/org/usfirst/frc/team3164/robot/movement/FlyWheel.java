@@ -25,12 +25,18 @@ public class FlyWheel {
 	}
 	
 	public void update(GoalAlign alignment) {
+		double shooterPower;
+		if(SmartDashboard.getBoolean("Flywheel Testing Mode") == false) {
+			shooterPower = 1;
+		} else {
+			shooterPower = SmartDashboard.getNumber("Flywheel Testing Power");
+		}
     	if (gamePad.buttons.BUTTON_A.isOn()) {
     		//shoot(DistanceSensorData); 
     		//shooter.getMotor().getSpark().set(1);
-    		//shooter.shoot(100);
+    		//shooter.shoot(100);s
     		//shooter.setPower(getPowerFromDistance(alignment.imageHeight, alignment.centerY, alignment.height));
-    		shooter.setPower(1);
+    		shooter.setPower(shooterPower);
     		
     	}
     	else if (!gamePad.buttons.BUTTON_A.isOn()) {

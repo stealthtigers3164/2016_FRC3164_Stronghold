@@ -104,6 +104,12 @@ public class Robot extends IterativeRobot {
 
         SmartDashboard.putNumber("Driving Scale Factor", 1);
         SmartDashboard.putNumber("Turning Scale Factor", 1);
+
+        
+        
+        SmartDashboard.putBoolean("Flywheel Testing Mode", false);
+        SmartDashboard.putNumber("Flywheel Testing Power", 1);
+        
         
         queue = new ThreadQueue<WorkerThread>();
         
