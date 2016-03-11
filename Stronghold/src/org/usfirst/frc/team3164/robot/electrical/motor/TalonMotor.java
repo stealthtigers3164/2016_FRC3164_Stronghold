@@ -129,4 +129,8 @@ public class TalonMotor implements BasicMotor {
 	public double getPower() {
 		return this.power;
 	}
+	
+	public double getVoltage() {
+		return this.getVoltage();
+	}
 }

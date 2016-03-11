@@ -45,4 +45,6 @@ public interface BasicMotor {
     public void slowStop();
     
     public double getPower();
+    
+    public double getVoltage();
 }

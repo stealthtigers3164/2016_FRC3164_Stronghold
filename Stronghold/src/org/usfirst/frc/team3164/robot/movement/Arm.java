@@ -42,6 +42,7 @@ public class Arm<T extends BasicMotor> extends MotorSet<T> {
 	public void updateMotors() {
 		if (shouldUpdate()) {
 			SmartDashboard.putNumber("Gamepad2 Right stick data", pad.sticks.RIGHT_Y.getRaw());
+			SmartDashboard.putNumber("Arm Motor Voltage", getMotorByIndex(motorIndex).getVoltage());
 			getMotorByIndex(motorIndex).setPower(pad.sticks.RIGHT_Y.getRaw());
 			//getMotorByIndex(motorIndex).setPower(pad.trigger.getLeftVal());
 		}
