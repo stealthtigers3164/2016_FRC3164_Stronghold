@@ -64,8 +64,10 @@ public class Feeder<T extends BasicMotor> extends MotorSet<T> {
 	public void updateMotors() {
 		if (gamePad.buttons.BUTTON_B.isOn()) {
 			running = true;
+			getMotorByIndex(motorIndex).setPower(1);
 		}
-		else if (gamePad.buttons.BUTTON_X.isOn()) {
+		else {
+			getMotorByIndex(motorIndex).setPower(0);
 			running = false;
 		}
 		SmartDashboard.putBoolean("Feeder Limit Switch", limitSwitch.isPressed());

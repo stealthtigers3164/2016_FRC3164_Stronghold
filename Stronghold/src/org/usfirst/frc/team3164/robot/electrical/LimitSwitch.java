@@ -1,12 +1,14 @@
 package org.usfirst.frc.team3164.robot.electrical;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LimitSwitch {
-	private DigitalInput lin;
+	private AnalogInput lin;
 	
 	public LimitSwitch(final int port) {
-		lin = new DigitalInput(port);
+		lin = new AnalogInput(port);
 	}
 	
 	/**
@@ -14,6 +16,7 @@ public class LimitSwitch {
 	 * @return true if the limit switch is pressed.
 	 */
 	public boolean isPressed() {
-		return lin.get();//TODO The NOT is because all of our limit swithches are reversed/
+		SmartDashboard.putNumber("Limit Switch", lin.getValue());
+		return lin.getValue() > 500;//TODO The NOT is because all of our limit swithches are reversed/
 	}
 }

@@ -38,7 +38,10 @@ public class Intake<T extends BasicMotor> extends MotorSet<T> {
 	@Override
 	public void updateMotors() {
 		if (shouldUpdate()) {
-			getMotorByIndex(motorIndex).setPower(1);
+			getMotorByIndex(motorIndex).setPower(.5);
+		}
+		else {
+			getMotorByIndex(motorIndex).setPower(0);
 		}
 	}
 
