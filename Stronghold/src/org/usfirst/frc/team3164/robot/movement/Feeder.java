@@ -72,7 +72,7 @@ public class Feeder<T extends BasicMotor> extends MotorSet<T> {
 			getMotorByIndex(motorIndex).setPower(-1);
 		}
 		
-		if (gamePad.buttons.BUTTON_B.isOn() && gamePad.buttons.BUTTON_X.isOn()){
+		if (!gamePad.buttons.BUTTON_B.isOn() && !gamePad.buttons.BUTTON_X.isOn()){
 			getMotorByIndex(motorIndex).setPower(0);
 			running = false;
 		}
