@@ -154,18 +154,47 @@ public class Robot extends IterativeRobot {
 	 * If using the SendableChooser make sure to add them to the chooser code above as well.
 	 */
     public void autonomousInit() {
-    	SmartDashboard.putString("Auto", "Started");
-    	auto_Finish = System.currentTimeMillis() + (SmartDashboard.getNumber("Auto Forward Seconds") * 1000);
+    	//SmartDashboard.putString("Auto", "Started");
+    	//auto_Finish = System.currentTimeMillis() + (SmartDashboard.getNumber("Auto Forward Seconds") * 1000);
+    	//Those arent needed anymore becuase they are set in the switch statement in the periodic
+    	wait_Sec = System.currentTimeMillis() + (1 * 1000);
     }
 
     private double auto_Finish;
+    private boolean auto_Forwards = true;
+    private boolean auto_Running = true;
+    private int auto_Stage = 0;
+    private double wait_Sec;
     public void autonomousPeriodic() {
-    	if(auto_Finish >= System.currentTimeMillis()) {
-    		drive.setLeftPower(0.5);
-    		drive.setRightPower(0.5);
-    	} else {
+    	if(wait_Sec > System.currentTimeMillis() && auto_Running) {
     		drive.setLeftPower(0);
-    		drive.setRightPower(0);
+			drive.setRightPower(0);
+			switch(auto_Stage) {
+				case 1:
+					auto_Forwards = true;
+					auto_Finish = System.currentTimeMillis() + (1000 * 5); //5 seconds going forwards
+					break;
+				case 2:
+					auto_Forwards = false;
+					auto_Finish = System.currentTimeMillis() + (1000 * 3); //3 seconds going backwards
+					break;
+				case 3:
+					auto_Forwards = true;
+					auto_Finish = System.currentTimeMillis() + (1000 * 4); //4 seconds going forwards again
+					break;
+				case 4:
+				default:
+					auto_Running = false;
+					
+			}
+    	} else {
+    		if(auto_Finish >= System.currentTimeMillis()) {
+    			drive.setLeftPower(0.5 * (auto_Forwards ? 1 : -1));
+    			drive.setRightPower(0.5 * (auto_Forwards ? 1 : -1));
+    		} else {
+    			wait_Sec = System.currentTimeMillis() + (1 * 1000);
+    			auto_Stage++;
+    		}
     	}
     	//for (double area : grip.getNumberArray("GoalContours/area", new double[0])) {
            // System.out.println("Got contour with area=" + area);
